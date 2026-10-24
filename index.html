@@ -89,6 +89,7 @@ svg.i{width:1em;height:1em;fill:currentColor;flex:none}
 /* ---------- Timeline ---------- */
 .timeline{position:relative;padding:8px 0 4px}
 .timeline::before{content:"";position:absolute;left:74px;top:18px;bottom:18px;width:2px;background:var(--line)}
+.timeline.bare::before{display:none}
 .item{display:grid;grid-template-columns:52px 24px 1fr;column-gap:10px;align-items:start;margin-bottom:12px;position:relative}
 .when{text-align:right;padding-top:13px;line-height:1.05;font-variant-numeric:tabular-nums}
 .when b{display:block;font-size:17px}
@@ -508,6 +509,7 @@ function renderToday(){
   $('backToday').hidden = isToday;
 
   const list = $('taskList');
+  list.classList.add('bare');
   if(!state.tasks.length){ list.innerHTML = `<p class="empty">No tasks yet. In the Settings tab, tap Import task list and pick your tasks.json, or add tasks one by one.</p>`; return; }
   const code = dayCode(k);
   const ts = dayTasks(k).sort((a,b) => a.times[code].localeCompare(b.times[code]));
@@ -547,6 +549,7 @@ function renderToday(){
   if(!nowDone) html += nowLine();
   if(ts.every(t => full(k,t))) html += `<p class="allclear">All ${ts.length} tasks done${isToday?' today':''}.</p>`;
   list.innerHTML = html;
+  list.classList.remove('bare');
 }
 
 function setValue(id, v){
