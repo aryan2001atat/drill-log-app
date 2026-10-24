@@ -3,9 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Drill Log</title>
+<title>Abhyas</title>
+<meta name="application-name" content="Abhyas">
+<meta name="apple-mobile-web-app-title" content="Abhyas">
 <meta name="description" content="Daily tasks, 1–10 scores and streaks.">
-<meta name="theme-color" content="#42532F">
+<meta name="theme-color" content="#3C8F00">
+<script>
+/* Apply the saved colours and light/dark choice before the page draws. */
+(function(){var p={};try{p=JSON.parse(localStorage.getItem('abhyas.prefs')||'{}')}catch(e){}
+var r=document.documentElement,ok=['green','navy','sky','ember','indigo','olive'];
+r.dataset.palette=ok.indexOf(p.palette)>=0?p.palette:'green';
+var m=p.mode||'system';if(m==='system')m=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+r.dataset.mode=m;})();
+</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -13,129 +23,208 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#E4E7DA; --surface:#F3F4EC; --ink:#1D261C; --muted:#5F6857; --line:#C7CCB8;
-  --olive:#42532F; --olive-soft:#D3D9C2; --brass:#A87518; --brass-soft:#EBD9AE;
-  --met:#3D7A45; --met-soft:#BFD8BE; --miss:#A93A2C; --miss-soft:#E9C3BC; --empty:#D9DCCD;
-  --radius:10px;
-}
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#151A13; --surface:#1E251B; --ink:#E2E6D6; --muted:#9AA38E; --line:#323C2C;
-    --olive:#9DB27D; --olive-soft:#2C3726; --brass:#D9A441; --brass-soft:#3D3220;
-    --met:#6FB074; --met-soft:#24402A; --miss:#E07462; --miss-soft:#4A2620; --empty:#262E22;
-  }
-}
+:root{--radius:12px}
+html[data-palette="green"]{--bg:#F4F7F1;--surface:#FFFFFF;--ink:#1F2A1A;--muted:#5E6B57;--line:#DCE5D3;--primary:#3C8F00;--on-primary:#FFFFFF;--hero:#3C8F00;--on-hero:#FFFFFF;--flame:#FFB020;--flame-ink:#4A2A00;--accent:#D97400;--accent-soft:#FFE9C7;--met:#46A302;--miss:#E5484D;--empty:#E3EADB;--ring-done:#FFFFFF}
+html[data-palette="green"][data-mode="dark"]{--bg:#0F1A0C;--surface:#172413;--ink:#E4EEDD;--muted:#9AAD8F;--line:#2A3B23;--primary:#6CD42A;--on-primary:#0F1A0C;--hero:#1E3A12;--on-hero:#E9F5E1;--flame:#FFB020;--flame-ink:#4A2A00;--accent:#FFA733;--accent-soft:#3A2A10;--met:#58CC02;--miss:#FF6B6B;--empty:#24331E;--ring-done:#8EE35A}
+html[data-palette="navy"]{--bg:#ECEFF5;--surface:#FFFFFF;--ink:#121B2E;--muted:#56607A;--line:#CED5E3;--primary:#14284B;--on-primary:#FFFFFF;--hero:#14284B;--on-hero:#F2F4F8;--flame:#E8B53A;--flame-ink:#3A2A00;--accent:#A97A0F;--accent-soft:#F3E3B8;--met:#2E8C6A;--miss:#B83A3A;--empty:#DCE2EC;--ring-done:#7FD6B4}
+html[data-palette="navy"][data-mode="dark"]{--bg:#0B1220;--surface:#121C30;--ink:#E3E8F2;--muted:#93A0B8;--line:#24314A;--primary:#8FB0E8;--on-primary:#0B1220;--hero:#16284A;--on-hero:#E3E8F2;--flame:#E8B53A;--flame-ink:#3A2A00;--accent:#E0B04A;--accent-soft:#3A3018;--met:#4FBF94;--miss:#E8756F;--empty:#1C2840;--ring-done:#7FD6B4}
+html[data-palette="sky"]{--bg:#EEF4FB;--surface:#FFFFFF;--ink:#12243A;--muted:#546A82;--line:#CFDDEC;--primary:#1F5FA8;--on-primary:#FFFFFF;--hero:#1F5FA8;--on-hero:#FFFFFF;--flame:#FFB347;--flame-ink:#4A2600;--accent:#C76800;--accent-soft:#FFE4C2;--met:#2F9E5B;--miss:#D64545;--empty:#DDE7F2;--ring-done:#9BE3B5}
+html[data-palette="sky"][data-mode="dark"]{--bg:#0C1622;--surface:#132233;--ink:#E2ECF7;--muted:#93A7BE;--line:#22364D;--primary:#7DB4F0;--on-primary:#0C1622;--hero:#173A63;--on-hero:#E2ECF7;--flame:#FFA62B;--flame-ink:#4A2600;--accent:#FFA94D;--accent-soft:#3B2A15;--met:#4CC27E;--miss:#F07575;--empty:#1B2D42;--ring-done:#9BE3B5}
+html[data-palette="ember"]{--bg:#F1F0EE;--surface:#FFFFFF;--ink:#1E2026;--muted:#62656E;--line:#DAD8D4;--primary:#23272F;--on-primary:#FFFFFF;--hero:#23272F;--on-hero:#F1F0EE;--flame:#FF6B2C;--flame-ink:#FFFFFF;--accent:#D24E14;--accent-soft:#FFDCCB;--met:#2FA374;--miss:#D63A3A;--empty:#E3E1DD;--ring-done:#3FBF8A}
+html[data-palette="ember"][data-mode="dark"]{--bg:#121317;--surface:#1B1D23;--ink:#E8E6E3;--muted:#9A9CA4;--line:#2C2F37;--primary:#FF7A3D;--on-primary:#121317;--hero:#1E2128;--on-hero:#E8E6E3;--flame:#FF6B2C;--flame-ink:#FFFFFF;--accent:#FF8A50;--accent-soft:#3A2318;--met:#3FBF8A;--miss:#F06A6A;--empty:#262930;--ring-done:#3FBF8A}
+html[data-palette="indigo"]{--bg:#F4F2FA;--surface:#FFFFFF;--ink:#1E1A33;--muted:#625C7A;--line:#DDD8EC;--primary:#3B2F7A;--on-primary:#FFFFFF;--hero:#3B2F7A;--on-hero:#F4F2FA;--flame:#F5B700;--flame-ink:#3A2A00;--accent:#9C7000;--accent-soft:#F7E7B5;--met:#2E9E6E;--miss:#C9413F;--empty:#E4E0F0;--ring-done:#8FE0BC}
+html[data-palette="indigo"][data-mode="dark"]{--bg:#120F1F;--surface:#1B172C;--ink:#E8E5F3;--muted:#A09ABA;--line:#2E2846;--primary:#A99BF0;--on-primary:#120F1F;--hero:#2A2152;--on-hero:#E8E5F3;--flame:#F5B700;--flame-ink:#3A2A00;--accent:#F0C040;--accent-soft:#3A3018;--met:#4CC290;--miss:#EF7672;--empty:#241F3A;--ring-done:#8FE0BC}
+html[data-palette="olive"]{--bg:#E4E7DA;--surface:#F4F5EE;--ink:#1D261C;--muted:#5F6857;--line:#C9CEBB;--primary:#42532F;--on-primary:#F3F4EC;--hero:#42532F;--on-hero:#F3F4EC;--flame:#F2C35B;--flame-ink:#3A2A08;--accent:#A87518;--accent-soft:#EBD9AE;--met:#3D7A45;--miss:#A93A2C;--empty:#D6DACA;--ring-done:#8FD18F}
+html[data-palette="olive"][data-mode="dark"]{--bg:#141912;--surface:#1D241A;--ink:#E2E6D6;--muted:#9AA38E;--line:#313B2B;--primary:#9DB27D;--on-primary:#141912;--hero:#232E1D;--on-hero:#E2E6D6;--flame:#F2C35B;--flame-ink:#3A2A08;--accent:#D9A441;--accent-soft:#3D3220;--met:#6FB074;--miss:#E07462;--empty:#2A3325;--ring-done:#8FD18F}
+html{color-scheme:light}
+html[data-mode="dark"]{color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink)}
-body{font-family:Barlow,system-ui,sans-serif;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+body{font-family:Barlow,system-ui,sans-serif;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
-:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .wrap{max-width:560px;margin:0 auto;padding:0 16px}
+svg.i{width:1em;height:1em;fill:currentColor;flex:none}
+[hidden]{display:none!important}
 
-/* Header: the one loud element */
-header{background:var(--olive);color:#F3F4EC;padding:calc(18px + env(safe-area-inset-top)) 0 20px}
-@media (prefers-color-scheme: dark){header{background:#26321F}}
-.hdr{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
-.streak{display:flex;align-items:flex-end;gap:10px}
-.streak .num{font-family:"Saira Stencil One",Barlow,sans-serif;font-size:76px;line-height:.82;letter-spacing:1px;color:#F2C35B}
-.streak .lbl{padding-bottom:4px;font-weight:600;line-height:1.15}
-.streak .lbl small{display:block;font-weight:400;opacity:.8}
-.today-score{text-align:right;font-weight:600;line-height:1.15}
-.today-score b{font-size:28px;font-weight:700}
-.today-score small{display:block;font-weight:400;opacity:.8}
+/* ---------- Hero: streak, week strip, today ring ---------- */
+.hero{background:var(--hero);color:var(--on-hero);padding:calc(16px + env(safe-area-inset-top)) 0 18px;border-radius:0 0 22px 22px}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.streak{display:flex;align-items:center;gap:10px}
+.streak .flame{font-size:54px;color:var(--flame)}
+.streak .flame.cold{color:color-mix(in srgb, var(--on-hero) 35%, transparent)}
+.streak .num{font-family:"Saira Stencil One",Barlow,sans-serif;font-size:72px;line-height:.85;color:var(--flame);font-variant-numeric:tabular-nums}
+.streak .lbl{font-weight:700;font-size:18px;line-height:1.15}
+.streak .lbl small{display:block;font-weight:500;font-size:15px;opacity:.75}
+.ring{position:relative;width:78px;height:78px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:8}
+.ring .track{stroke:color-mix(in srgb, var(--on-hero) 20%, transparent)}
+.ring .fill{stroke:var(--flame);stroke-linecap:round;transition:stroke-dashoffset .5s ease}
+.ring .fill.done{stroke:var(--ring-done)}
+.ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.ring .val b{font-size:22px}
+.ring .val small{font-size:12px;opacity:.75;margin-top:3px;white-space:nowrap}
 
-/* Date nav */
-.datebar{display:flex;align-items:center;justify-content:space-between;margin:16px 0 10px}
-.datebar h2{margin:0;font-size:20px;font-weight:700}
-.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;font-size:20px}
-.iconbtn:disabled{opacity:.35;cursor:default}
-.jump{border:0;background:none;color:var(--olive);font-weight:600;text-decoration:underline;padding:0 0 10px}
+.week{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.week li{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:13px;font-weight:600;color:color-mix(in srgb, var(--on-hero) 72%, transparent)}
+.week li.today{color:var(--on-hero)}
+.week i{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:16px;border:2px solid color-mix(in srgb, var(--on-hero) 30%, transparent)}
+.week .met i{background:var(--flame);border-color:var(--flame);color:var(--flame-ink)}
+.week .miss i{border-color:transparent;background:rgba(0,0,0,.2);color:color-mix(in srgb, var(--on-hero) 85%, transparent)}
+.week .rest i{border-style:dashed;color:color-mix(in srgb, var(--on-hero) 50%, transparent)}
+.week .open i{border-color:var(--flame);border-width:3px}
+.week .future i{opacity:.55}
+.hero-msg{margin:14px 0 0;font-weight:500;font-size:16px;opacity:.92}
 
-/* Task rows */
-.task{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:10px}
-.t-top{display:flex;align-items:baseline;gap:10px}
-.t-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600;min-width:62px}
-.t-name{font-weight:700;font-size:18px;flex:1}
-.t-streak{font-family:"Saira Stencil One",Barlow,sans-serif;color:var(--brass);font-size:20px;white-space:nowrap}
-.t-streak.zero{color:var(--muted);opacity:.6}
-.m-row{display:flex;align-items:center;gap:12px;margin:12px 0 10px}
-.meter{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;flex:1}
-.meter i{height:12px;border-radius:2px;background:var(--empty);position:relative;overflow:hidden}
-.meter i span{position:absolute;inset:0 auto 0 0;background:var(--olive)}
-.meter.met i span{background:var(--met)}
-.t-ctrl{display:flex;align-items:center;gap:8px}
-.step{width:44px;height:44px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:22px;font-weight:600}
-.val{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
-.val input{width:72px;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);text-align:center;font-weight:700;font-size:19px}
-.val span{color:var(--muted);line-height:1.2}
-.score{font-weight:700;font-size:19px;min-width:52px;text-align:right;font-variant-numeric:tabular-nums}
-.score small{font-weight:400;color:var(--muted);font-size:14px}
-.full{border:0;background:none;color:var(--olive);font-weight:600;padding:6px 0 0;font-size:15px}
+/* ---------- Day bar ---------- */
+.datebar{display:flex;align-items:center;justify-content:space-between;margin:16px 0 6px}
+.datebar h2{margin:0;font-size:20px;font-weight:700;text-align:center}
+.datebar h2 small{display:block;font-size:14px;font-weight:500;color:var(--muted)}
+.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:42px;height:42px;display:grid;place-items:center;font-size:22px;line-height:1}
+.iconbtn:disabled{opacity:.3;cursor:default}
+.jump{display:block;margin:0 auto 6px;border:0;background:none;color:var(--primary);font-weight:600;text-decoration:underline;padding:4px}
+
+/* ---------- Timeline ---------- */
+.timeline{position:relative;padding:8px 0 4px}
+.timeline::before{content:"";position:absolute;left:74px;top:18px;bottom:18px;width:2px;background:var(--line)}
+.item{display:grid;grid-template-columns:52px 24px 1fr;column-gap:10px;align-items:start;margin-bottom:12px;position:relative}
+.when{text-align:right;padding-top:13px;line-height:1.05;font-variant-numeric:tabular-nums}
+.when b{display:block;font-size:17px}
+.when small{font-size:12px;color:var(--muted);font-weight:600}
+.item.due .when{color:var(--accent)}
+.node{width:24px;height:24px;border-radius:50%;margin-top:14px;position:relative;z-index:1;display:grid;place-items:center;
+  background:conic-gradient(var(--primary) calc(var(--p,0) * 1turn), var(--empty) 0);box-shadow:0 0 0 4px var(--bg)}
+.node::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--bg)}
+.item.full .node{background:var(--met)}
+.item.full .node::after{display:none}
+.node svg{position:relative;z-index:1;color:#fff;font-size:14px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.item.due .card{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.head{display:grid;grid-template-columns:1fr auto;gap:2px 10px;width:100%;text-align:left;background:none;border:0;padding:12px 14px 10px}
+.head .name{font-weight:700;font-size:18px;line-height:1.2}
+.head .meta{color:var(--muted);font-size:15px;grid-column:1}
+.head .sc{grid-row:1 / span 2;grid-column:2;align-self:center;text-align:right;line-height:1}
+.head .sc b{font-size:24px;font-variant-numeric:tabular-nums}
+.head .sc small{color:var(--muted);font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:2px;margin-left:8px;font-size:16px;font-weight:700;color:var(--accent);vertical-align:1px}
+.chip.zero{color:var(--muted);opacity:.55}
+.meter{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;padding:0 14px}
+.meter i{height:8px;border-radius:2px;background:var(--empty);position:relative;overflow:hidden}
+.meter i span{position:absolute;inset:0 auto 0 0;background:var(--primary)}
+.item.full .meter i span{background:var(--met)}
+.ctrl{display:flex;align-items:center;gap:6px;padding:12px 14px 14px}
+.step{width:40px;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:22px;font-weight:600;line-height:1;flex:none}
+.ctrl input{width:58px;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--bg);text-align:center;font-weight:700;font-size:18px;flex:none}
+.ctrl .sp{flex:1}
+.done{width:46px;height:42px;border-radius:999px;border:0;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-size:24px;flex:none}
+.item.collapsed .ctrl{display:none}
+.item.collapsed .meter{padding-bottom:12px}
+.item.full .card{background:transparent}
+
+.now{display:grid;grid-template-columns:52px 24px 1fr;column-gap:10px;align-items:center;margin:-2px 0 10px}
+.now .t{text-align:right;font-size:13px;font-weight:700;color:var(--accent)}
+.now .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);justify-self:center;position:relative;z-index:1;box-shadow:0 0 0 4px var(--bg)}
+.now .ln{height:2px;background:var(--accent);opacity:.6}
+
 .empty{padding:28px 4px;color:var(--muted)}
+.allclear{text-align:center;padding:10px 0 4px;color:var(--met);font-weight:700}
 
-/* Calendar */
+/* ---------- Calendar ---------- */
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .cal .dow{font-size:13px;color:var(--muted);text-align:center;font-weight:600}
-.cal button{aspect-ratio:1;border:0;border-radius:8px;background:var(--empty);font-weight:600;font-variant-numeric:tabular-nums;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;padding:0}
+.cal button{aspect-ratio:1;border:0;border-radius:10px;background:var(--empty);font-weight:600;font-variant-numeric:tabular-nums;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;padding:0}
 .cal button small{font-size:11px;font-weight:500;opacity:.85}
 .cal .met{background:var(--met);color:#fff}
 .cal .miss{background:var(--miss);color:#fff}
-.cal .open{background:var(--brass-soft);outline:2px solid var(--brass);outline-offset:-2px}
+html[data-mode="dark"] .cal .met,html[data-mode="dark"] .cal .miss,html[data-mode="dark"] .node svg{color:var(--bg)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px}
+.seg button{border:0;background:none;height:42px;border-radius:9px;font-weight:600;color:var(--muted)}
+.seg button[aria-checked="true"]{background:var(--primary);color:var(--on-primary)}
+.swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sw{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:0;overflow:hidden;text-align:left}
+.sw .pv{height:56px;display:flex;align-items:center;justify-content:center;gap:4px;font-size:26px}
+.sw .pv b{font-family:"Saira Stencil One",Barlow,sans-serif;font-weight:400;font-size:28px;line-height:1}
+.sw .nm{display:block;padding:7px 9px 8px;font-size:14px;font-weight:600;line-height:1.2}
+.sw[aria-checked="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.sw[aria-checked="true"] .nm::after{content:" ✓";color:var(--accent)}
+.cal .open{background:var(--accent-soft);outline:2px solid var(--accent);outline-offset:-2px}
 .cal .off,.cal .future{background:transparent;color:var(--muted);border:1px dashed var(--line)}
 .cal .blank{visibility:hidden}
-.legend{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0;color:var(--muted);font-size:15px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0 4px;color:var(--muted);font-size:15px}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 18px}
-.stats div{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px}
-.stats b{display:block;font-size:22px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 16px}
+.stats div{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;line-height:1.2}
+.stats b{display:block;font-size:24px;margin-bottom:2px}
 .stats span{color:var(--muted);font-size:14px}
+table.ts{width:100%;border-collapse:collapse;margin-top:6px;font-variant-numeric:tabular-nums}
+table.ts th{font-size:14px;color:var(--muted);font-weight:600;text-align:right;padding:6px 4px;border-bottom:1px solid var(--line)}
+table.ts th:first-child,table.ts td:first-child{text-align:left}
+table.ts td{padding:10px 4px;border-bottom:1px solid var(--line);text-align:right}
+table.ts td.cur{color:var(--accent);font-weight:700}
 
-/* Tasks & settings */
+/* ---------- Tasks & settings ---------- */
 section h3{font-size:18px;margin:22px 0 8px}
 .row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
 .row .grow{flex:1;min-width:0}
 .row .sub{color:var(--muted);font-size:15px}
-.btn{border:1px solid var(--olive);background:var(--olive);color:#F3F4EC;border-radius:8px;padding:10px 16px;font-weight:600}
-@media (prefers-color-scheme: dark){.btn{color:#151A13}}
-.btn.ghost{background:transparent;color:var(--olive)}
+.btn{border:1px solid var(--primary);background:var(--primary);color:var(--on-primary);border-radius:10px;padding:10px 16px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--primary)}
 .btn.danger{background:transparent;color:var(--miss);border-color:var(--miss)}
 .btns{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 p.note{color:var(--muted);font-size:15px;margin:6px 0}
 label.field{display:block;margin:10px 0}
 label.field > span{display:block;font-weight:600;margin-bottom:4px}
-label.field input,label.field select{width:100%;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:0 10px}
+label.field input,label.field select{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 10px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .days{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center}
-.days input{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:0 8px;width:100%}
-
-dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);width:min(520px,calc(100% - 24px));padding:18px;max-height:calc(100dvh - 40px)}
+.days input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;width:100%}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);width:min(520px,calc(100% - 24px));padding:18px;max-height:calc(100dvh - 40px)}
 dialog::backdrop{background:rgba(20,26,18,.55)}
 dialog h3{margin:0 0 6px}
 
-/* Bottom tabs */
+/* ---------- Bottom tabs ---------- */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
 nav.tabs .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
-nav.tabs button{border:0;background:none;height:60px;font-weight:600;color:var(--muted);border-top:3px solid transparent}
-nav.tabs button[aria-selected="true"]{color:var(--ink);border-top-color:var(--brass)}
+nav.tabs button{border:0;background:none;height:64px;font-weight:600;font-size:14px;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+nav.tabs button svg{font-size:24px}
+nav.tabs button[aria-selected="true"]{color:var(--ink)}
+nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
 
-.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;max-width:calc(100% - 32px);text-align:center}
 .toast.show{opacity:1}
-@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
-.pop{animation:pop .45s ease-out}
-@media (prefers-reduced-motion: reduce){.pop{animation:none}.toast{transition:none}}
-[hidden]{display:none!important}
+@keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.25)}100%{transform:scale(1)}}
+.pop{animation:pop .5s ease-out}
+@media (prefers-reduced-motion: reduce){.pop{animation:none}.toast,.ring .fill{transition:none}}
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap hdr">
-    <div class="streak">
-      <div class="num" id="hStreak">0</div>
-      <div class="lbl">day streak<small id="hBest">Best 0</small></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12.6 1.5c.6 3.3-.9 5.3-2.6 7.2C8.3 10.6 6 12.6 6 16a6 6 0 0 0 12 0c0-2.7-1.2-4.6-2.4-6.1 0 1.6-.7 2.9-1.8 3.5.6-3.8-.4-8.6-1.2-11.9zM12 21.2a2.8 2.8 0 0 1-2.8-2.8c0-1.6 1.2-2.6 2.2-3.6.3 1 1 1.6 1.7 2.2.6.5 1.7 1.1 1.7 1.4a2.8 2.8 0 0 1-2.8 2.8z" fill-rule="evenodd"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l-1.6 1.6 6 6L21 8l-1.6-1.6z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6 10.6 12 5 6.4z"/></symbol>
+  <symbol id="i-today" viewBox="0 0 24 24"><path d="M4 5h2v2H4zm4 0h12v2H8zM4 11h2v2H4zm4 0h12v2H8zm-4 6h2v2H4zm4 0h12v2H8z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3zm12 8H5v9h14zM7 12h3v3H7z"/></symbol>
+  <symbol id="i-tasks" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="2" rx="1"/><circle cx="15" cy="7" r="3"/><rect x="3" y="16" width="18" height="2" rx="1"/><circle cx="9" cy="17" r="3"/></symbol>
+</svg>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="streak">
+        <svg class="i flame" id="hFlame" aria-hidden="true"><use href="#i-flame"/></svg>
+        <span class="num" id="hStreak">0</span>
+        <span class="lbl">day streak<small id="hBest">Best 0</small></span>
+      </div>
+      <div class="ring" role="img" id="hRing" aria-label="Today's score">
+        <svg viewBox="0 0 80 80"><circle class="track" cx="40" cy="40" r="34"/><circle class="fill" id="hRingFill" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/></svg>
+        <div class="val"><b id="hScore">0</b><small id="hScoreLbl">/10 today</small></div>
+      </div>
     </div>
-    <div class="today-score"><b id="hScore">0</b>/10<small id="hScoreLbl">today's score</small></div>
+    <ol class="week" id="week" aria-label="This week"></ol>
+    <p class="hero-msg" id="hMsg"></p>
   </div>
 </header>
 
@@ -146,8 +235,8 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-top-color:var(--br
       <h2 id="dayTitle">Today</h2>
       <button class="iconbtn" id="nextDay" aria-label="Next day">›</button>
     </div>
-    <div style="text-align:center"><button class="jump" id="backToday" hidden>Back to today</button></div>
-    <div id="taskList"></div>
+    <button class="jump" id="backToday" hidden>Back to today</button>
+    <div class="timeline" id="taskList"></div>
   </section>
 
   <section id="view-calendar" hidden>
@@ -165,9 +254,14 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-top-color:var(--br
     <div class="legend">
       <span><i style="background:var(--met)"></i>On target</span>
       <span><i style="background:var(--miss)"></i>Missed</span>
-      <span><i style="background:var(--brass-soft);outline:2px solid var(--brass);outline-offset:-2px"></i>Today, in progress</span>
+      <span><i style="background:var(--accent-soft);outline:2px solid var(--accent);outline-offset:-2px"></i>Today</span>
     </div>
     <p class="note">Tap a day to see or fix what you logged.</p>
+    <h3>Task streaks</h3>
+    <table class="ts">
+      <thead><tr><th>Task</th><th>Now</th><th>Best</th><th>Month avg</th></tr></thead>
+      <tbody id="taskStats"></tbody>
+    </table>
   </section>
 
   <section id="view-tasks" hidden>
@@ -179,6 +273,16 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-top-color:var(--br
       <input type="file" id="importTasksFile" accept="application/json,.json" hidden>
     </div>
     <p class="note">Import task list loads a <b>tasks.json</b> file. Your scores and streaks are kept.</p>
+
+    <h3>Theme</h3>
+    <div class="seg" role="radiogroup" aria-label="Theme" id="modeSeg">
+      <button role="radio" data-mode="light">Light</button>
+      <button role="radio" data-mode="dark">Dark</button>
+      <button role="radio" data-mode="system">System</button>
+    </div>
+
+    <h3>Colours</h3>
+    <div class="swatches" role="radiogroup" aria-label="Colours" id="swatches"></div>
 
     <h3>Phone reminders</h3>
     <p class="note">Reminders come from the <b>tasks.json</b> file in your private reminders repository (repo). After you change tasks here, copy the new file and paste it over tasks.json on GitHub.</p>
@@ -206,9 +310,9 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-top-color:var(--br
 
 <nav class="tabs" aria-label="Sections">
   <div class="wrap" role="tablist">
-    <button role="tab" data-view="today" aria-selected="true">Today</button>
-    <button role="tab" data-view="calendar" aria-selected="false">Calendar</button>
-    <button role="tab" data-view="tasks" aria-selected="false">Tasks</button>
+    <button role="tab" data-view="today" aria-selected="true"><svg class="i" aria-hidden="true"><use href="#i-today"/></svg>Today</button>
+    <button role="tab" data-view="calendar" aria-selected="false"><svg class="i" aria-hidden="true"><use href="#i-cal"/></svg>Calendar</button>
+    <button role="tab" data-view="tasks" aria-selected="false"><svg class="i" aria-hidden="true"><use href="#i-tasks"/></svg>Settings</button>
   </div>
 </nav>
 
@@ -239,11 +343,38 @@ nav.tabs button[aria-selected="true"]{color:var(--ink);border-top-color:var(--br
 <script>
 (() => {
 'use strict';
-const KEY = 'drilllog.v1';
+const KEY = 'drilllog.v1';            // unchanged, so existing logs keep working
 const DAYS = ['sun','mon','tue','wed','thu','fri','sat'];
 const DAY_NAMES = {mon:'Monday',tue:'Tuesday',wed:'Wednesday',thu:'Thursday',fri:'Friday',sat:'Saturday',sun:'Sunday'};
 const WEEK = ['mon','tue','wed','thu','fri','sat','sun'];
 const FALLBACK = {utc_offset:'+05:30',tasks:[]};
+const RING = 213.6;
+
+// ---------- look: colours and light/dark ----------
+const PREFS_KEY = 'abhyas.prefs';
+const PALETTES = {"green":{"name":"Bright green","hero":"#3C8F00","flame":"#FFB020","bg":"#F4F7F1","darkHero":"#1E3A12","darkBg":"#0F1A0C"},"navy":{"name":"Navy and gold","hero":"#14284B","flame":"#E8B53A","bg":"#ECEFF5","darkHero":"#16284A","darkBg":"#0B1220"},"sky":{"name":"Sky and saffron","hero":"#1F5FA8","flame":"#FFB347","bg":"#EEF4FB","darkHero":"#173A63","darkBg":"#0C1622"},"ember":{"name":"Charcoal and ember","hero":"#23272F","flame":"#FF6B2C","bg":"#F1F0EE","darkHero":"#1E2128","darkBg":"#121317"},"indigo":{"name":"Indigo and marigold","hero":"#3B2F7A","flame":"#F5B700","bg":"#F4F2FA","darkHero":"#2A2152","darkBg":"#120F1F"},"olive":{"name":"Olive drab","hero":"#42532F","flame":"#F2C35B","bg":"#E4E7DA","darkHero":"#232E1D","darkBg":"#141912"}};
+const prefs = { palette:'green', mode:'system' };
+try { Object.assign(prefs, JSON.parse(localStorage.getItem(PREFS_KEY) || '{}')); } catch(e) {}
+const darkMQ = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+function applyLook(){
+  if(!PALETTES[prefs.palette]) prefs.palette = 'green';
+  if(!['light','dark','system'].includes(prefs.mode)) prefs.mode = 'system';
+  const mode = prefs.mode === 'system' ? (darkMQ && darkMQ.matches ? 'dark' : 'light') : prefs.mode;
+  const r = document.documentElement; r.dataset.palette = prefs.palette; r.dataset.mode = mode;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.content = getComputedStyle(r).getPropertyValue('--hero').trim();
+}
+function savePrefs(){ try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch(e) {} }
+function renderLook(){
+  document.querySelectorAll('#modeSeg button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.mode === prefs.mode)));
+  const dark = document.documentElement.dataset.mode === 'dark';
+  $('swatches').innerHTML = Object.entries(PALETTES).map(([k,p]) =>
+    `<button class="sw" role="radio" aria-checked="${k===prefs.palette}" data-pal="${k}">
+      <span class="pv" style="background:${dark?p.darkHero:p.hero};color:${p.flame}" aria-hidden="true">${icon('flame')}<b>7</b></span>
+      <span class="nm">${p.name}</span></button>`).join('');
+}
+if(darkMQ){ const onSys = () => { if(prefs.mode === 'system'){ applyLook(); if(view === 'tasks') renderLook(); } };
+  darkMQ.addEventListener ? darkMQ.addEventListener('change', onSys) : darkMQ.addListener(onSys); }
 
 // ---------- date helpers (phone's local time) ----------
 const pad = n => String(n).padStart(2,'0');
@@ -251,20 +382,17 @@ const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())
 const fromKey = k => { const [y,m,d] = k.split('-').map(Number); return new Date(y,m-1,d); };
 const addDays = (k,n) => { const d = fromKey(k); d.setDate(d.getDate()+n); return keyOf(d); };
 const todayKey = () => keyOf(new Date());
+const nowHM = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
 const dayCode = k => DAYS[fromKey(k).getDay()];
 const fmt1 = n => (Math.round(n*10)/10).toString();
-const time12 = t => { if(!t) return ''; let [h,m] = t.split(':').map(Number); const ap = h>=12?'PM':'AM'; h = h%12||12; return `${h}:${pad(m)} ${ap}`; };
+const split12 = t => { let [h,m] = t.split(':').map(Number); const ap = h>=12?'PM':'AM'; h = h%12||12; return [`${h}:${pad(m)}`, ap]; };
+const time12 = t => t ? split12(t).join(' ') : '';
+const icon = (id, cls='i') => `<svg class="${cls}" aria-hidden="true"><use href="#i-${id}"/></svg>`;
 
 // ---------- storage ----------
 let state = null;
-function load(){
-  try { const raw = localStorage.getItem(KEY); if(raw) return JSON.parse(raw); } catch(e) {}
-  return null;
-}
-function save(){
-  try { localStorage.setItem(KEY, JSON.stringify(state)); }
-  catch(e) { toast('Could not save. Is browser storage blocked?'); }
-}
+function load(){ try { const raw = localStorage.getItem(KEY); if(raw) return JSON.parse(raw); } catch(e) {} return null; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) { toast('Could not save. Is browser storage blocked?'); } }
 async function init(){
   state = load();
   if(!state){
@@ -276,19 +404,21 @@ async function init(){
   if(state.passMark == null) state.passMark = 5;
   viewDate = todayKey();
   buildPassMark();
+  applyLook();
   render();
 }
 
 // ---------- scoring ----------
 const scheduledOn = (task,k) => !!(task.times && task.times[dayCode(k)]);
-function entry(k,id){ return state.logs[k] && state.logs[k][id]; }
+const entry = (k,id) => state.logs[k] && state.logs[k][id];
 function scoreOf(k,task){
   const e = entry(k,task.id); if(!e) return 0;
   const t = e.t || task.target; if(!(t>0)) return 0;
   return Math.max(0, Math.min(10, e.v / t * 10));
 }
 const met = (k,task) => scoreOf(k,task) >= state.passMark - 1e-9;
-function dayTasks(k){ return state.tasks.filter(t => scheduledOn(t,k)); }
+const full = (k,task) => scoreOf(k,task) >= 10 - 1e-9;
+const dayTasks = k => state.tasks.filter(t => scheduledOn(t,k));
 function dayScore(k){
   const ts = dayTasks(k); if(!ts.length) return null;
   return ts.reduce((s,t) => s + scoreOf(k,t), 0) / ts.length;
@@ -306,82 +436,139 @@ function streakBack(isScheduled, isMet){
   }
   return n;
 }
-const taskStreak = task => streakBack(k => scheduledOn(task,k), k => met(k,task));
-const overallStreak = () => streakBack(k => dayTasks(k).length > 0, dayMet);
-function bestStreak(){
+function bestRun(isScheduled, isMet){
   let best = 0, run = 0; const today = todayKey();
   for(let k = state.startDate, i = 0; k <= today && i < 4000; k = addDays(k,1), i++){
-    if(!dayTasks(k).length) continue;
-    if(dayMet(k)){ run++; best = Math.max(best,run); }
+    if(!isScheduled(k)) continue;
+    if(isMet(k)){ run++; best = Math.max(best,run); }
     else if(k !== today) run = 0;
   }
   return best;
 }
+const taskStreak = t => streakBack(k => scheduledOn(t,k), k => met(k,t));
+const taskBest = t => bestRun(k => scheduledOn(t,k), k => met(k,t));
+const overallStreak = () => streakBack(k => dayTasks(k).length > 0, dayMet);
+const bestStreak = () => bestRun(k => dayTasks(k).length > 0, dayMet);
 
 // ---------- rendering ----------
 let viewDate = null, calMonth = null, view = 'today';
+const toggled = {};                  // per day: task ids the user opened or closed by hand
 const $ = id => document.getElementById(id);
-function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-function renderHeader(){
+function renderHero(){
+  const today = todayKey();
   const s = overallStreak();
   $('hStreak').textContent = s;
+  $('hFlame').classList.toggle('cold', !dayMet(today));
   $('hBest').textContent = `Best ${Math.max(bestStreak(), s)}`;
-  const ds = dayScore(todayKey());
+
+  const ds = dayScore(today);
   $('hScore').textContent = ds == null ? '–' : fmt1(ds);
-  $('hScoreLbl').textContent = ds == null ? 'rest day' : "today's score";
+  $('hScoreLbl').textContent = ds == null ? 'rest' : '/10 today';
+  const fill = $('hRingFill');
+  fill.setAttribute('stroke-dashoffset', String(RING * (1 - (ds||0)/10)));
+  fill.classList.toggle('done', ds != null && ds >= 10 - 1e-9);
+  $('hRing').setAttribute('aria-label', ds == null ? 'Rest day today' : `Today's score ${fmt1(ds)} out of 10`);
+
+  // Week strip, Monday first
+  const mon = addDays(today, -((fromKey(today).getDay()+6)%7));
+  $('week').innerHTML = WEEK.map((code,i) => {
+    const k = addDays(mon,i); let cls, inner = '', lbl;
+    if(k > today){ cls = 'future'; lbl = 'coming up'; }
+    else if(k < state.startDate || !dayTasks(k).length){ cls = 'rest'; inner = '–'; lbl = 'rest day'; }
+    else if(dayMet(k)){ cls = 'met'; inner = icon('flame'); lbl = 'on target'; }
+    else if(k === today){ cls = 'open'; lbl = 'in progress'; }
+    else { cls = 'miss'; inner = icon('x'); lbl = 'missed'; }
+    if(k === today) cls += ' today';
+    return `<li class="${cls}" aria-label="${DAY_NAMES[code]}, ${lbl}">${DAY_NAMES[code][0]}<i>${inner}</i></li>`;
+  }).join('');
+
+  // One line on what keeps the streak going
+  const ts = dayTasks(today), left = ts.filter(t => !full(today,t)).length;
+  let msg;
+  if(!state.tasks.length) msg = 'Add your tasks to start a streak.';
+  else if(!ts.length) msg = 'Rest day. Your streak is safe.';
+  else if(dayMet(today)) msg = left ? `Streak safe for today. ${left} task${left>1?'s':''} still open.` : 'Every task done today. Well earned.';
+  else msg = `Reach ${state.passMark}/10 today to make it ${s+1} day${s+1===1?'':'s'}.`;
+  $('hMsg').textContent = msg;
+}
+
+function isCollapsed(k,t){
+  const base = full(k,t);
+  return (toggled[k] && toggled[k].has(t.id)) ? !base : base;
 }
 
 function renderToday(){
-  const k = viewDate, today = todayKey();
-  const d = fromKey(k);
-  $('dayTitle').textContent = k === today
-    ? `Today, ${d.toLocaleDateString('en-IN',{day:'numeric', month:'short'})}`
-    : d.toLocaleDateString('en-IN',{weekday:'long', day:'numeric', month:'short'});
+  const k = viewDate, today = todayKey(), isToday = k === today, d = fromKey(k);
+  $('dayTitle').innerHTML = isToday
+    ? `Today<small>${d.toLocaleDateString('en-IN',{weekday:'long', day:'numeric', month:'short'})}</small>`
+    : `${d.toLocaleDateString('en-IN',{weekday:'long'})}<small>${d.toLocaleDateString('en-IN',{day:'numeric', month:'short', year:'numeric'})}</small>`;
   $('nextDay').disabled = k >= today;
-  $('backToday').hidden = k === today;
+  $('backToday').hidden = isToday;
 
-  const ts = dayTasks(k).sort((a,b) => a.times[dayCode(k)].localeCompare(b.times[dayCode(k)]));
   const list = $('taskList');
-  if(!state.tasks.length){ list.innerHTML = `<p class="empty">No tasks yet. In the Tasks tab, tap Import task list and pick your tasks.json, or add tasks one by one.</p>`; return; }
+  if(!state.tasks.length){ list.innerHTML = `<p class="empty">No tasks yet. In the Settings tab, tap Import task list and pick your tasks.json, or add tasks one by one.</p>`; return; }
+  const code = dayCode(k);
+  const ts = dayTasks(k).sort((a,b) => a.times[code].localeCompare(b.times[code]));
   if(!ts.length){ list.innerHTML = `<p class="empty">Nothing scheduled for this day. Streaks are safe.</p>`; return; }
-  list.innerHTML = ts.map(t => {
-    const e = entry(k,t.id); const v = e ? e.v : 0; const sc = scoreOf(k,t); const isMet = sc >= state.passMark - 1e-9;
+
+  const hm = nowHM(); let html = '', nowDone = !isToday;
+  const nowLine = () => `<div class="now" aria-label="Now, ${time12(hm)}"><span class="t">${split12(hm)[0]}</span><span class="dot"></span><span class="ln"></span></div>`;
+  for(const t of ts){
+    const time = t.times[code];
+    if(!nowDone && time > hm){ html += nowLine(); nowDone = true; }
+    const e = entry(k,t.id), v = e ? e.v : 0, sc = scoreOf(k,t), isFull = full(k,t);
+    const due = isToday && !isFull && time <= hm;
+    const collapsed = isCollapsed(k,t);
     const st = taskStreak(t);
+    const [hhmm, ap] = split12(time);
     const segs = Array.from({length:10}, (_,i) => `<i><span style="width:${Math.max(0,Math.min(1,sc-i))*100}%"></span></i>`).join('');
-    return `<article class="task" data-id="${esc(t.id)}">
-      <div class="t-top">
-        <span class="t-time">${time12(t.times[dayCode(k)])}</span>
-        <span class="t-name">${esc(t.name)}</span>
-        <span class="t-streak ${st?'':'zero'}" title="${st}-day streak for this task" aria-label="${st} day streak">🔥 ${st}</span>
+    html += `<article class="item ${isFull?'full':''} ${due?'due':''} ${collapsed?'collapsed':''}" data-id="${esc(t.id)}">
+      <div class="when"><b>${hhmm}</b><small>${ap}</small></div>
+      <div class="node" style="--p:${sc/10}">${isFull ? icon('check') : ''}</div>
+      <div class="card">
+        <button class="head" data-act="toggle" aria-expanded="${!collapsed}">
+          <span class="name">${esc(t.name)}<span class="chip ${st?'':'zero'}" aria-label="${st} day streak">${icon('flame')}${st}</span></span>
+          <span class="meta">${fmt1(v)} of ${fmt1(t.target)} ${esc(t.unit)}</span>
+          <span class="sc"><b>${fmt1(sc)}</b><small>/10</small></span>
+        </button>
+        <div class="meter" role="img" aria-label="Score ${fmt1(sc)} out of 10">${segs}</div>
+        <div class="ctrl">
+          <button class="step" data-act="minus" aria-label="Less ${esc(t.name)}">−</button>
+          <input type="number" inputmode="decimal" min="0" step="any" value="${fmt1(v)}" data-act="set" aria-label="${esc(t.name)}, ${esc(t.unit)} done">
+          <button class="step" data-act="plus" aria-label="More ${esc(t.name)}">+</button>
+          <span class="sp"></span>
+          ${isFull ? '' : `<button class="done" data-act="full" aria-label="Mark ${esc(t.name)} fully done" title="Mark fully done">${icon('check')}</button>`}
+        </div>
       </div>
-      <div class="m-row">
-        <div class="meter ${isMet?'met':''}" role="img" aria-label="Score ${fmt1(sc)} out of 10">${segs}</div>
-        <span class="score">${fmt1(sc)}<small>/10</small></span>
-      </div>
-      <div class="t-ctrl">
-        <button class="step" data-act="minus" aria-label="Less ${esc(t.name)}">−</button>
-        <label class="val"><input type="number" inputmode="decimal" min="0" step="any" value="${fmt1(v)}" data-act="set" aria-label="${esc(t.name)} done"><span>of ${fmt1(t.target)} ${esc(t.unit)}</span></label>
-        <button class="step" data-act="plus" aria-label="More ${esc(t.name)}">+</button>
-      </div>
-      ${v < t.target ? `<button class="full" data-act="full">Mark full target done</button>` : ''}
     </article>`;
-  }).join('');
+  }
+  if(!nowDone) html += nowLine();
+  if(ts.every(t => full(k,t))) html += `<p class="allclear">All ${ts.length} tasks done${isToday?' today':''}.</p>`;
+  list.innerHTML = html;
 }
 
 function setValue(id, v){
   const k = viewDate; const t = state.tasks.find(x => x.id === id); if(!t) return;
-  const before = met(k,t);
+  const wasMet = met(k,t), wasDayMet = dayMet(k), wasAll = dayTasks(k).every(x => full(k,x));
+  const before = overallStreak();
   v = Math.max(0, Math.round(v*100)/100);
-  if(v > 0 && k < state.startDate) state.startDate = k; // logging an earlier day extends the history
+  if(v > 0 && k < state.startDate) state.startDate = k;      // logging an earlier day extends the history
   state.logs[k] = state.logs[k] || {};
   if(v === 0) delete state.logs[k][id]; else state.logs[k][id] = { v, t: t.target };
-  if(state.logs[k] && !Object.keys(state.logs[k]).length) delete state.logs[k];
+  if(!Object.keys(state.logs[k]).length) delete state.logs[k];
+  if(toggled[k]) toggled[k].delete(id);
   save(); render();
-  if(!before && met(k,t)){
-    const el = document.querySelector(`.task[data-id="${CSS.escape(id)}"] .t-streak`);
-    if(el){ el.classList.add('pop'); }
-    if(k === todayKey() && dayMet(k) && dayTasks(k).every(x => met(k,x))) toast('Every task on target today');
+
+  if(!wasMet && met(k,t)){ const el = document.querySelector(`.item[data-id="${CSS.escape(id)}"] .chip`); if(el) el.classList.add('pop'); }
+  const after = overallStreak();
+  if(k === todayKey()){
+    if(!wasDayMet && dayMet(k)){
+      $('hStreak').classList.add('pop'); $('hFlame').classList.add('pop');
+      setTimeout(() => { $('hStreak').classList.remove('pop'); $('hFlame').classList.remove('pop'); }, 600);
+      toast(after > before ? `Streak extended to ${after} day${after>1?'s':''}` : 'Today is on target');
+    } else if(!wasAll && dayTasks(k).every(x => full(k,x))) toast('Every task done today');
   }
 }
 
@@ -392,16 +579,17 @@ function renderCalendar(){
   const first = new Date(y,m-1,1);
   $('monthTitle').textContent = first.toLocaleDateString('en-IN',{month:'long',year:'numeric'});
   $('nextMonth').disabled = calMonth >= today.slice(0,7);
-  const lead = (first.getDay()+6)%7; // Monday first
-  const daysIn = new Date(y,m,0).getDate();
+  const lead = (first.getDay()+6)%7, daysIn = new Date(y,m,0).getDate();
   let html = WEEK.map(d => `<div class="dow">${DAY_NAMES[d].slice(0,3)}</div>`).join('');
   for(let i=0;i<lead;i++) html += `<button class="blank" tabindex="-1" aria-hidden="true"></button>`;
   let onTarget = 0, sum = 0, cnt = 0;
+  const monthDays = [];
   for(let d=1; d<=daysIn; d++){
     const k = `${y}-${pad(m)}-${pad(d)}`;
     let cls = 'off', sub = '';
     if(k > today) cls = 'future';
     else if(k >= state.startDate){
+      monthDays.push(k);
       const s = dayScore(k);
       if(s != null){
         sub = fmt1(s);
@@ -417,6 +605,13 @@ function renderCalendar(){
   $('sDays').textContent = onTarget;
   $('sAvg').textContent = cnt ? fmt1(sum/cnt) : '–';
   $('sBest').textContent = Math.max(bestStreak(), overallStreak());
+
+  $('taskStats').innerHTML = state.tasks.map(t => {
+    const ds = monthDays.filter(k => scheduledOn(t,k) && (k !== today || met(k,t)));
+    const avg = ds.length ? fmt1(ds.reduce((a,k) => a + scoreOf(k,t), 0) / ds.length) : '–';
+    const now = taskStreak(t);
+    return `<tr><td>${esc(t.name)}</td><td class="cur">${now}</td><td>${Math.max(taskBest(t), now)}</td><td>${avg}</td></tr>`;
+  }).join('') || `<tr><td colspan="4" class="note">No tasks yet.</td></tr>`;
 }
 
 function renderTasks(){
@@ -427,10 +622,11 @@ function renderTasks(){
       <button class="btn ghost" data-edit="${esc(t.id)}">Edit</button></div>`;
   }).join('') : `<p class="empty">No tasks yet.</p>`;
   $('passMark').value = String(state.passMark);
+  renderLook();
 }
 
 function render(){
-  renderHeader();
+  renderHero();
   if(view === 'today') renderToday();
   if(view === 'calendar') renderCalendar();
   if(view === 'tasks') renderTasks();
@@ -454,7 +650,11 @@ $('cal').addEventListener('click', e => { const b = e.target.closest('button[dat
 
 $('taskList').addEventListener('click', e => {
   const b = e.target.closest('button[data-act]'); if(!b) return;
-  const id = b.closest('.task').dataset.id; const t = state.tasks.find(x => x.id === id);
+  const id = b.closest('.item').dataset.id; const t = state.tasks.find(x => x.id === id);
+  if(b.dataset.act === 'toggle'){
+    const set = toggled[viewDate] || (toggled[viewDate] = new Set());
+    set.has(id) ? set.delete(id) : set.add(id); renderToday(); return;
+  }
   const cur = (entry(viewDate,id)||{v:0}).v;
   if(b.dataset.act === 'plus') setValue(id, cur + (t.step||1));
   if(b.dataset.act === 'minus') setValue(id, cur - (t.step||1));
@@ -462,12 +662,16 @@ $('taskList').addEventListener('click', e => {
 });
 $('taskList').addEventListener('change', e => {
   const i = e.target.closest('input[data-act="set"]'); if(!i) return;
-  const v = parseFloat(i.value); setValue(i.closest('.task').dataset.id, isNaN(v) ? 0 : v);
+  const v = parseFloat(i.value); setValue(i.closest('.item').dataset.id, isNaN(v) ? 0 : v);
 });
 
 function buildPassMark(){
   $('passMark').innerHTML = [1,2,3,4,5,6,7,8,9,10].map(n => `<option value="${n}">${n} out of 10${n===5?' (half the target)':''}${n===10?' (full target)':''}</option>`).join('');
 }
+$('modeSeg').addEventListener('click', e => { const b = e.target.closest('button[data-mode]'); if(!b) return;
+  prefs.mode = b.dataset.mode; savePrefs(); applyLook(); renderLook(); });
+$('swatches').addEventListener('click', e => { const b = e.target.closest('button[data-pal]'); if(!b) return;
+  prefs.palette = b.dataset.pal; savePrefs(); applyLook(); renderLook(); toast(`${PALETTES[prefs.palette].name} applied`); });
 $('passMark').onchange = e => { state.passMark = Number(e.target.value); save(); render(); toast(`Streak rule set to ${state.passMark}/10`); };
 
 // Task editor
@@ -523,19 +727,7 @@ $('copyReminders').onclick = async () => {
 };
 $('downloadReminders').onclick = () => download('tasks.json', reminderJSON());
 
-// Backup
-$('exportData').onclick = () => download(`drill-log-backup-${todayKey()}.json`, JSON.stringify(state, null, 1));
-$('importBtn').onclick = () => $('importFile').click();
-$('importFile').onchange = async e => {
-  const file = e.target.files[0]; if(!file) return;
-  try {
-    const data = JSON.parse(await file.text());
-    if(!Array.isArray(data.tasks) || typeof data.logs !== 'object') throw new Error('bad');
-    if(!confirm('Replace everything on this phone with this backup?')) return;
-    state = data; save(); viewDate = todayKey(); render(); toast('Backup restored');
-  } catch(err) { toast('That file is not a Drill Log backup'); }
-  e.target.value = '';
-};
+// Task list import
 $('importTasksBtn').onclick = () => $('importTasksFile').click();
 $('importTasksFile').onchange = async e => {
   const file = e.target.files[0]; if(!file) return;
@@ -551,6 +743,19 @@ $('importTasksFile').onchange = async e => {
   e.target.value = '';
 };
 
+// Backup
+$('exportData').onclick = () => download(`abhyas-backup-${todayKey()}.json`, JSON.stringify(state, null, 1));
+$('importBtn').onclick = () => $('importFile').click();
+$('importFile').onchange = async e => {
+  const file = e.target.files[0]; if(!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    if(!Array.isArray(data.tasks) || typeof data.logs !== 'object') throw new Error('bad');
+    if(!confirm('Replace everything on this phone with this backup?')) return;
+    state = data; save(); viewDate = todayKey(); render(); toast('Backup restored');
+  } catch(err) { toast('That file is not an Abhyas backup'); }
+  e.target.value = '';
+};
 $('resetAll').onclick = async () => {
   if(!confirm('Erase all tasks, scores and streaks on this phone? This cannot be undone.')) return;
   try { localStorage.removeItem(KEY); } catch(e) {}
@@ -560,8 +765,9 @@ $('resetAll').onclick = async () => {
 let toastTimer;
 function toast(msg){ const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600); }
 
-// Refresh when the app comes back to the foreground (day may have changed)
+// Refresh when the app comes back to the foreground (day or time may have changed)
 document.addEventListener('visibilitychange', () => { if(!document.hidden){ const t = todayKey(); if(viewDate > t) viewDate = t; render(); } });
+setInterval(() => { if(!document.hidden && view === 'today' && viewDate === todayKey()) renderToday(); }, 60000);
 
 if('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 init();
