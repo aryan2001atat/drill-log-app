@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Drill Log</title>
+<meta name="description" content="Daily tasks, 1–10 scores and streaks.">
+<meta name="theme-color" content="#42532F">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E4E7DA; --surface:#F3F4EC; --ink:#1D261C; --muted:#5F6857; --line:#C7CCB8;
+  --olive:#42532F; --olive-soft:#D3D9C2; --brass:#A87518; --brass-soft:#EBD9AE;
+  --met:#3D7A45; --met-soft:#BFD8BE; --miss:#A93A2C; --miss-soft:#E9C3BC; --empty:#D9DCCD;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#151A13; --surface:#1E251B; --ink:#E2E6D6; --muted:#9AA38E; --line:#323C2C;
+    --olive:#9DB27D; --olive-soft:#2C3726; --brass:#D9A441; --brass-soft:#3D3220;
+    --met:#6FB074; --met-soft:#24402A; --miss:#E07462; --miss-soft:#4A2620; --empty:#262E22;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:Barlow,system-ui,sans-serif;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent;padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+
+/* Header: the one loud element */
+header{background:var(--olive);color:#F3F4EC;padding:calc(18px + env(safe-area-inset-top)) 0 20px}
+@media (prefers-color-scheme: dark){header{background:#26321F}}
+.hdr{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.streak{display:flex;align-items:flex-end;gap:10px}
+.streak .num{font-family:"Saira Stencil One",Barlow,sans-serif;font-size:76px;line-height:.82;letter-spacing:1px;color:#F2C35B}
+.streak .lbl{padding-bottom:4px;font-weight:600;line-height:1.15}
+.streak .lbl small{display:block;font-weight:400;opacity:.8}
+.today-score{text-align:right;font-weight:600;line-height:1.15}
+.today-score b{font-size:28px;font-weight:700}
+.today-score small{display:block;font-weight:400;opacity:.8}
+
+/* Date nav */
+.datebar{display:flex;align-items:center;justify-content:space-between;margin:16px 0 10px}
+.datebar h2{margin:0;font-size:20px;font-weight:700}
+.iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;font-size:20px}
+.iconbtn:disabled{opacity:.35;cursor:default}
+.jump{border:0;background:none;color:var(--olive);font-weight:600;text-decoration:underline;padding:0 0 10px}
+
+/* Task rows */
+.task{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.t-top{display:flex;align-items:baseline;gap:10px}
+.t-time{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600;min-width:62px}
+.t-name{font-weight:700;font-size:18px;flex:1}
+.t-streak{font-family:"Saira Stencil One",Barlow,sans-serif;color:var(--brass);font-size:20px;white-space:nowrap}
+.t-streak.zero{color:var(--muted);opacity:.6}
+.m-row{display:flex;align-items:center;gap:12px;margin:12px 0 10px}
+.meter{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;flex:1}
+.meter i{height:12px;border-radius:2px;background:var(--empty);position:relative;overflow:hidden}
+.meter i span{position:absolute;inset:0 auto 0 0;background:var(--olive)}
+.meter.met i span{background:var(--met)}
+.t-ctrl{display:flex;align-items:center;gap:8px}
+.step{width:44px;height:44px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:22px;font-weight:600}
+.val{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.val input{width:72px;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);text-align:center;font-weight:700;font-size:19px}
+.val span{color:var(--muted);line-height:1.2}
+.score{font-weight:700;font-size:19px;min-width:52px;text-align:right;font-variant-numeric:tabular-nums}
+.score small{font-weight:400;color:var(--muted);font-size:14px}
+.full{border:0;background:none;color:var(--olive);font-weight:600;padding:6px 0 0;font-size:15px}
+.empty{padding:28px 4px;color:var(--muted)}
+
+/* Calendar */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .dow{font-size:13px;color:var(--muted);text-align:center;font-weight:600}
+.cal button{aspect-ratio:1;border:0;border-radius:8px;background:var(--empty);font-weight:600;font-variant-numeric:tabular-nums;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;padding:0}
+.cal button small{font-size:11px;font-weight:500;opacity:.85}
+.cal .met{background:var(--met);color:#fff}
+.cal .miss{background:var(--miss);color:#fff}
+.cal .open{background:var(--brass-soft);outline:2px solid var(--brass);outline-offset:-2px}
+.cal .off,.cal .future{background:transparent;color:var(--muted);border:1px dashed var(--line)}
+.cal .blank{visibility:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0;color:var(--muted);font-size:15px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 18px}
+.stats div{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px}
+.stats b{display:block;font-size:22px}
+.stats span{color:var(--muted);font-size:14px}
+
+/* Tasks & settings */
+section h3{font-size:18px;margin:22px 0 8px}
+.row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+.row .grow{flex:1;min-width:0}
+.row .sub{color:var(--muted);font-size:15px}
+.btn{border:1px solid var(--olive);background:var(--olive);color:#F3F4EC;border-radius:8px;padding:10px 16px;font-weight:600}
+@media (prefers-color-scheme: dark){.btn{color:#151A13}}
+.btn.ghost{background:transparent;color:var(--olive)}
+.btn.danger{background:transparent;color:var(--miss);border-color:var(--miss)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+p.note{color:var(--muted);font-size:15px;margin:6px 0}
+label.field{display:block;margin:10px 0}
+label.field > span{display:block;font-weight:600;margin-bottom:4px}
+label.field input,label.field select{width:100%;height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:0 10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.days{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center}
+.days input{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:0 8px;width:100%}
+
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);width:min(520px,calc(100% - 24px));padding:18px;max-height:calc(100dvh - 40px)}
+dialog::backdrop{background:rgba(20,26,18,.55)}
+dialog h3{margin:0 0 6px}
+
+/* Bottom tabs */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
+nav.tabs button{border:0;background:none;height:60px;font-weight:600;color:var(--muted);border-top:3px solid transparent}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-top-color:var(--brass)}
+
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+.pop{animation:pop .45s ease-out}
+@media (prefers-reduced-motion: reduce){.pop{animation:none}.toast{transition:none}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap hdr">
+    <div class="streak">
+      <div class="num" id="hStreak">0</div>
+      <div class="lbl">day streak<small id="hBest">Best 0</small></div>
+    </div>
+    <div class="today-score"><b id="hScore">0</b>/10<small id="hScoreLbl">today's score</small></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="view-today">
+    <div class="datebar">
+      <button class="iconbtn" id="prevDay" aria-label="Previous day">‹</button>
+      <h2 id="dayTitle">Today</h2>
+      <button class="iconbtn" id="nextDay" aria-label="Next day">›</button>
+    </div>
+    <div style="text-align:center"><button class="jump" id="backToday" hidden>Back to today</button></div>
+    <div id="taskList"></div>
+  </section>
+
+  <section id="view-calendar" hidden>
+    <div class="datebar">
+      <button class="iconbtn" id="prevMonth" aria-label="Previous month">‹</button>
+      <h2 id="monthTitle"></h2>
+      <button class="iconbtn" id="nextMonth" aria-label="Next month">›</button>
+    </div>
+    <div class="stats">
+      <div><b id="sDays">0</b><span>days on target</span></div>
+      <div><b id="sAvg">0</b><span>average score</span></div>
+      <div><b id="sBest">0</b><span>best streak</span></div>
+    </div>
+    <div class="cal" id="cal"></div>
+    <div class="legend">
+      <span><i style="background:var(--met)"></i>On target</span>
+      <span><i style="background:var(--miss)"></i>Missed</span>
+      <span><i style="background:var(--brass-soft);outline:2px solid var(--brass);outline-offset:-2px"></i>Today, in progress</span>
+    </div>
+    <p class="note">Tap a day to see or fix what you logged.</p>
+  </section>
+
+  <section id="view-tasks" hidden>
+    <h3>Your tasks</h3>
+    <div id="taskRows"></div>
+    <div class="btns">
+      <button class="btn" id="addTask">Add a task</button>
+      <button class="btn ghost" id="importTasksBtn">Import task list</button>
+      <input type="file" id="importTasksFile" accept="application/json,.json" hidden>
+    </div>
+    <p class="note">Import task list loads a <b>tasks.json</b> file. Your scores and streaks are kept.</p>
+
+    <h3>Phone reminders</h3>
+    <p class="note">Reminders come from the <b>tasks.json</b> file in your private reminders repository (repo). After you change tasks here, copy the new file and paste it over tasks.json on GitHub.</p>
+    <div class="btns">
+      <button class="btn" id="copyReminders">Copy reminder file</button>
+      <button class="btn ghost" id="downloadReminders">Download it</button>
+    </div>
+
+    <h3>Streak rule</h3>
+    <label class="field"><span>A day counts toward the streak when the score is at least</span>
+      <select id="passMark"></select>
+    </label>
+    <p class="note">Days a task isn't scheduled never break its streak.</p>
+
+    <h3>Backup</h3>
+    <p class="note">Your log lives only in this phone's browser. Clearing browser data erases it, so download a backup now and then.</p>
+    <div class="btns">
+      <button class="btn" id="exportData">Download backup</button>
+      <button class="btn ghost" id="importBtn">Restore backup</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+    <div class="btns" style="margin-top:18px"><button class="btn danger" id="resetAll">Erase everything</button></div>
+  </section>
+</main>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap" role="tablist">
+    <button role="tab" data-view="today" aria-selected="true">Today</button>
+    <button role="tab" data-view="calendar" aria-selected="false">Calendar</button>
+    <button role="tab" data-view="tasks" aria-selected="false">Tasks</button>
+  </div>
+</nav>
+
+<dialog id="editDlg">
+  <form method="dialog" id="editForm">
+    <h3 id="editTitle">Edit task</h3>
+    <label class="field"><span>Name</span><input name="name" required maxlength="40"></label>
+    <div class="two">
+      <label class="field"><span>Daily target</span><input name="target" type="number" min="0.1" step="any" required inputmode="decimal"></label>
+      <label class="field"><span>Unit</span><input name="unit" required maxlength="20" placeholder="minutes, km, pages"></label>
+    </div>
+    <label class="field"><span>Plus/minus button adds</span><input name="step" type="number" min="0.1" step="any" required inputmode="decimal"></label>
+    <p style="font-weight:600;margin:14px 0 6px">Reminder time per day (leave blank for a day off)</p>
+    <div class="days" id="dayInputs"></div>
+    <div class="btns"><button type="button" class="btn ghost" id="copyMon">Copy Monday's time to Tue–Fri</button></div>
+    <div class="btns" style="justify-content:space-between;margin-top:16px">
+      <button type="button" class="btn danger" id="deleteTask">Delete task</button>
+      <span style="display:flex;gap:8px">
+        <button type="button" class="btn ghost" id="cancelEdit">Cancel</button>
+        <button type="submit" class="btn" value="save">Save</button>
+      </span>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+const KEY = 'drilllog.v1';
+const DAYS = ['sun','mon','tue','wed','thu','fri','sat'];
+const DAY_NAMES = {mon:'Monday',tue:'Tuesday',wed:'Wednesday',thu:'Thursday',fri:'Friday',sat:'Saturday',sun:'Sunday'};
+const WEEK = ['mon','tue','wed','thu','fri','sat','sun'];
+const FALLBACK = {utc_offset:'+05:30',tasks:[]};
+
+// ---------- date helpers (phone's local time) ----------
+const pad = n => String(n).padStart(2,'0');
+const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const fromKey = k => { const [y,m,d] = k.split('-').map(Number); return new Date(y,m-1,d); };
+const addDays = (k,n) => { const d = fromKey(k); d.setDate(d.getDate()+n); return keyOf(d); };
+const todayKey = () => keyOf(new Date());
+const dayCode = k => DAYS[fromKey(k).getDay()];
+const fmt1 = n => (Math.round(n*10)/10).toString();
+const time12 = t => { if(!t) return ''; let [h,m] = t.split(':').map(Number); const ap = h>=12?'PM':'AM'; h = h%12||12; return `${h}:${pad(m)} ${ap}`; };
+
+// ---------- storage ----------
+let state = null;
+function load(){
+  try { const raw = localStorage.getItem(KEY); if(raw) return JSON.parse(raw); } catch(e) {}
+  return null;
+}
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(state)); }
+  catch(e) { toast('Could not save. Is browser storage blocked?'); }
+}
+async function init(){
+  state = load();
+  if(!state){
+    let seed = FALLBACK;
+    try { const r = await fetch('tasks.json',{cache:'no-store'}); if(r.ok) seed = await r.json(); } catch(e) {}
+    state = { version:1, startDate: todayKey(), passMark:5, utc_offset: seed.utc_offset||'+05:30', tasks: seed.tasks||[], logs:{} };
+    save();
+  }
+  if(state.passMark == null) state.passMark = 5;
+  viewDate = todayKey();
+  buildPassMark();
+  render();
+}
+
+// ---------- scoring ----------
+const scheduledOn = (task,k) => !!(task.times && task.times[dayCode(k)]);
+function entry(k,id){ return state.logs[k] && state.logs[k][id]; }
+function scoreOf(k,task){
+  const e = entry(k,task.id); if(!e) return 0;
+  const t = e.t || task.target; if(!(t>0)) return 0;
+  return Math.max(0, Math.min(10, e.v / t * 10));
+}
+const met = (k,task) => scoreOf(k,task) >= state.passMark - 1e-9;
+function dayTasks(k){ return state.tasks.filter(t => scheduledOn(t,k)); }
+function dayScore(k){
+  const ts = dayTasks(k); if(!ts.length) return null;
+  return ts.reduce((s,t) => s + scoreOf(k,t), 0) / ts.length;
+}
+const dayMet = k => { const s = dayScore(k); return s != null && s >= state.passMark - 1e-9; };
+
+// Walk back from today. Unscheduled days are skipped; today only counts once it's met.
+function streakBack(isScheduled, isMet){
+  const today = todayKey(); let n = 0;
+  for(let k = today, i = 0; k >= state.startDate && i < 4000; k = addDays(k,-1), i++){
+    if(!isScheduled(k)) continue;
+    if(isMet(k)) n++;
+    else if(k === today) continue;
+    else break;
+  }
+  return n;
+}
+const taskStreak = task => streakBack(k => scheduledOn(task,k), k => met(k,task));
+const overallStreak = () => streakBack(k => dayTasks(k).length > 0, dayMet);
+function bestStreak(){
+  let best = 0, run = 0; const today = todayKey();
+  for(let k = state.startDate, i = 0; k <= today && i < 4000; k = addDays(k,1), i++){
+    if(!dayTasks(k).length) continue;
+    if(dayMet(k)){ run++; best = Math.max(best,run); }
+    else if(k !== today) run = 0;
+  }
+  return best;
+}
+
+// ---------- rendering ----------
+let viewDate = null, calMonth = null, view = 'today';
+const $ = id => document.getElementById(id);
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function renderHeader(){
+  const s = overallStreak();
+  $('hStreak').textContent = s;
+  $('hBest').textContent = `Best ${Math.max(bestStreak(), s)}`;
+  const ds = dayScore(todayKey());
+  $('hScore').textContent = ds == null ? '–' : fmt1(ds);
+  $('hScoreLbl').textContent = ds == null ? 'rest day' : "today's score";
+}
+
+function renderToday(){
+  const k = viewDate, today = todayKey();
+  const d = fromKey(k);
+  $('dayTitle').textContent = k === today
+    ? `Today, ${d.toLocaleDateString('en-IN',{day:'numeric', month:'short'})}`
+    : d.toLocaleDateString('en-IN',{weekday:'long', day:'numeric', month:'short'});
+  $('nextDay').disabled = k >= today;
+  $('backToday').hidden = k === today;
+
+  const ts = dayTasks(k).sort((a,b) => a.times[dayCode(k)].localeCompare(b.times[dayCode(k)]));
+  const list = $('taskList');
+  if(!state.tasks.length){ list.innerHTML = `<p class="empty">No tasks yet. In the Tasks tab, tap Import task list and pick your tasks.json, or add tasks one by one.</p>`; return; }
+  if(!ts.length){ list.innerHTML = `<p class="empty">Nothing scheduled for this day. Streaks are safe.</p>`; return; }
+  list.innerHTML = ts.map(t => {
+    const e = entry(k,t.id); const v = e ? e.v : 0; const sc = scoreOf(k,t); const isMet = sc >= state.passMark - 1e-9;
+    const st = taskStreak(t);
+    const segs = Array.from({length:10}, (_,i) => `<i><span style="width:${Math.max(0,Math.min(1,sc-i))*100}%"></span></i>`).join('');
+    return `<article class="task" data-id="${esc(t.id)}">
+      <div class="t-top">
+        <span class="t-time">${time12(t.times[dayCode(k)])}</span>
+        <span class="t-name">${esc(t.name)}</span>
+        <span class="t-streak ${st?'':'zero'}" title="${st}-day streak for this task" aria-label="${st} day streak">🔥 ${st}</span>
+      </div>
+      <div class="m-row">
+        <div class="meter ${isMet?'met':''}" role="img" aria-label="Score ${fmt1(sc)} out of 10">${segs}</div>
+        <span class="score">${fmt1(sc)}<small>/10</small></span>
+      </div>
+      <div class="t-ctrl">
+        <button class="step" data-act="minus" aria-label="Less ${esc(t.name)}">−</button>
+        <label class="val"><input type="number" inputmode="decimal" min="0" step="any" value="${fmt1(v)}" data-act="set" aria-label="${esc(t.name)} done"><span>of ${fmt1(t.target)} ${esc(t.unit)}</span></label>
+        <button class="step" data-act="plus" aria-label="More ${esc(t.name)}">+</button>
+      </div>
+      ${v < t.target ? `<button class="full" data-act="full">Mark full target done</button>` : ''}
+    </article>`;
+  }).join('');
+}
+
+function setValue(id, v){
+  const k = viewDate; const t = state.tasks.find(x => x.id === id); if(!t) return;
+  const before = met(k,t);
+  v = Math.max(0, Math.round(v*100)/100);
+  if(v > 0 && k < state.startDate) state.startDate = k; // logging an earlier day extends the history
+  state.logs[k] = state.logs[k] || {};
+  if(v === 0) delete state.logs[k][id]; else state.logs[k][id] = { v, t: t.target };
+  if(state.logs[k] && !Object.keys(state.logs[k]).length) delete state.logs[k];
+  save(); render();
+  if(!before && met(k,t)){
+    const el = document.querySelector(`.task[data-id="${CSS.escape(id)}"] .t-streak`);
+    if(el){ el.classList.add('pop'); }
+    if(k === todayKey() && dayMet(k) && dayTasks(k).every(x => met(k,x))) toast('Every task on target today');
+  }
+}
+
+function renderCalendar(){
+  const today = todayKey();
+  if(!calMonth) calMonth = today.slice(0,7);
+  const [y,m] = calMonth.split('-').map(Number);
+  const first = new Date(y,m-1,1);
+  $('monthTitle').textContent = first.toLocaleDateString('en-IN',{month:'long',year:'numeric'});
+  $('nextMonth').disabled = calMonth >= today.slice(0,7);
+  const lead = (first.getDay()+6)%7; // Monday first
+  const daysIn = new Date(y,m,0).getDate();
+  let html = WEEK.map(d => `<div class="dow">${DAY_NAMES[d].slice(0,3)}</div>`).join('');
+  for(let i=0;i<lead;i++) html += `<button class="blank" tabindex="-1" aria-hidden="true"></button>`;
+  let onTarget = 0, sum = 0, cnt = 0;
+  for(let d=1; d<=daysIn; d++){
+    const k = `${y}-${pad(m)}-${pad(d)}`;
+    let cls = 'off', sub = '';
+    if(k > today) cls = 'future';
+    else if(k >= state.startDate){
+      const s = dayScore(k);
+      if(s != null){
+        sub = fmt1(s);
+        if(s >= state.passMark - 1e-9){ cls = 'met'; onTarget++; }
+        else cls = k === today ? 'open' : 'miss';
+        if(k !== today || cls === 'met'){ sum += s; cnt++; }
+      }
+    }
+    const lbl = fromKey(k).toLocaleDateString('en-IN',{day:'numeric',month:'long'}) + (sub ? `, score ${sub}` : '');
+    html += `<button class="${cls}" data-day="${k}" aria-label="${lbl}" ${k>today?'disabled':''}>${d}${sub?`<small>${sub}</small>`:''}</button>`;
+  }
+  $('cal').innerHTML = html;
+  $('sDays').textContent = onTarget;
+  $('sAvg').textContent = cnt ? fmt1(sum/cnt) : '–';
+  $('sBest').textContent = Math.max(bestStreak(), overallStreak());
+}
+
+function renderTasks(){
+  $('taskRows').innerHTML = state.tasks.length ? state.tasks.map(t => {
+    const on = WEEK.filter(d => t.times[d]);
+    const daysTxt = on.length === 7 ? 'Every day' : on.length ? on.map(d => DAY_NAMES[d].slice(0,3)).join(', ') : 'No days set';
+    return `<div class="row"><div class="grow"><b>${esc(t.name)}</b><div class="sub">${fmt1(t.target)} ${esc(t.unit)}. ${daysTxt}</div></div>
+      <button class="btn ghost" data-edit="${esc(t.id)}">Edit</button></div>`;
+  }).join('') : `<p class="empty">No tasks yet.</p>`;
+  $('passMark').value = String(state.passMark);
+}
+
+function render(){
+  renderHeader();
+  if(view === 'today') renderToday();
+  if(view === 'calendar') renderCalendar();
+  if(view === 'tasks') renderTasks();
+}
+
+function show(v){
+  view = v;
+  document.querySelectorAll('nav.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === v)));
+  ['today','calendar','tasks'].forEach(x => $('view-'+x).hidden = x !== v);
+  render(); window.scrollTo(0,0);
+}
+
+// ---------- events ----------
+document.querySelectorAll('nav.tabs button').forEach(b => b.addEventListener('click', () => show(b.dataset.view)));
+$('prevDay').onclick = () => { viewDate = addDays(viewDate,-1); render(); };
+$('nextDay').onclick = () => { if(viewDate < todayKey()){ viewDate = addDays(viewDate,1); render(); } };
+$('backToday').onclick = () => { viewDate = todayKey(); render(); };
+$('prevMonth').onclick = () => { const [y,m] = calMonth.split('-').map(Number); const d = new Date(y,m-2,1); calMonth = `${d.getFullYear()}-${pad(d.getMonth()+1)}`; render(); };
+$('nextMonth').onclick = () => { const [y,m] = calMonth.split('-').map(Number); const d = new Date(y,m,1); calMonth = `${d.getFullYear()}-${pad(d.getMonth()+1)}`; render(); };
+$('cal').addEventListener('click', e => { const b = e.target.closest('button[data-day]'); if(!b || b.disabled) return; viewDate = b.dataset.day; show('today'); });
+
+$('taskList').addEventListener('click', e => {
+  const b = e.target.closest('button[data-act]'); if(!b) return;
+  const id = b.closest('.task').dataset.id; const t = state.tasks.find(x => x.id === id);
+  const cur = (entry(viewDate,id)||{v:0}).v;
+  if(b.dataset.act === 'plus') setValue(id, cur + (t.step||1));
+  if(b.dataset.act === 'minus') setValue(id, cur - (t.step||1));
+  if(b.dataset.act === 'full') setValue(id, t.target);
+});
+$('taskList').addEventListener('change', e => {
+  const i = e.target.closest('input[data-act="set"]'); if(!i) return;
+  const v = parseFloat(i.value); setValue(i.closest('.task').dataset.id, isNaN(v) ? 0 : v);
+});
+
+function buildPassMark(){
+  $('passMark').innerHTML = [1,2,3,4,5,6,7,8,9,10].map(n => `<option value="${n}">${n} out of 10${n===5?' (half the target)':''}${n===10?' (full target)':''}</option>`).join('');
+}
+$('passMark').onchange = e => { state.passMark = Number(e.target.value); save(); render(); toast(`Streak rule set to ${state.passMark}/10`); };
+
+// Task editor
+let editingId = null;
+$('dayInputs').innerHTML = WEEK.map(d => `<label for="time-${d}">${DAY_NAMES[d]}</label><input type="time" id="time-${d}" name="time-${d}">`).join('');
+function openEditor(id){
+  editingId = id; const f = $('editForm');
+  const t = id ? state.tasks.find(x => x.id === id) : {name:'',target:'',unit:'minutes',step:1,times:{}};
+  $('editTitle').textContent = id ? 'Edit task' : 'New task';
+  f.name.value = t.name; f.target.value = t.target; f.unit.value = t.unit; f.step.value = t.step;
+  WEEK.forEach(d => f['time-'+d].value = (t.times||{})[d] || '');
+  $('deleteTask').hidden = !id;
+  $('editDlg').showModal();
+}
+$('taskRows').addEventListener('click', e => { const b = e.target.closest('[data-edit]'); if(b) openEditor(b.dataset.edit); });
+$('addTask').onclick = () => openEditor(null);
+$('cancelEdit').onclick = () => $('editDlg').close();
+$('copyMon').onclick = () => { const f = $('editForm'); ['tue','wed','thu','fri'].forEach(d => f['time-'+d].value = f['time-mon'].value); };
+$('deleteTask').onclick = () => {
+  if(!editingId) return;
+  const t = state.tasks.find(x => x.id === editingId);
+  if(!confirm(`Delete "${t.name}"? Its past scores stay in your backup but won't show any more.`)) return;
+  state.tasks = state.tasks.filter(x => x.id !== editingId); save(); $('editDlg').close(); render();
+  toast('Task deleted. Copy the reminder file to update reminders.');
+};
+$('editForm').addEventListener('submit', e => {
+  e.preventDefault(); const f = e.target;
+  const target = parseFloat(f.target.value), step = parseFloat(f.step.value);
+  if(!(target > 0) || !(step > 0)){ toast('Target and button step must be above 0'); return; }
+  const times = {}; WEEK.forEach(d => times[d] = f['time-'+d].value || '');
+  const data = { name: f.name.value.trim(), target, unit: f.unit.value.trim(), step, times };
+  if(editingId){ Object.assign(state.tasks.find(x => x.id === editingId), data); }
+  else {
+    let base = data.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'task', id = base, n = 2;
+    while(state.tasks.some(x => x.id === id)) id = `${base}-${n++}`;
+    state.tasks.push({ id, ...data });
+  }
+  save(); $('editDlg').close(); render();
+  toast('Saved. Copy the reminder file to update reminders.');
+});
+
+// Reminder file
+function reminderJSON(){
+  return JSON.stringify({ utc_offset: state.utc_offset || '+05:30', tasks: state.tasks.map(t => ({ id:t.id, name:t.name, target:t.target, unit:t.unit, step:t.step, times:t.times })) }, null, 2) + '\n';
+}
+function download(name, text){
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text],{type:'application/json'})); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+$('copyReminders').onclick = async () => {
+  try { await navigator.clipboard.writeText(reminderJSON()); toast('Copied. Paste it over tasks.json on GitHub.'); }
+  catch(e) { download('tasks.json', reminderJSON()); toast('Copy is blocked here, so it was downloaded instead'); }
+};
+$('downloadReminders').onclick = () => download('tasks.json', reminderJSON());
+
+// Backup
+$('exportData').onclick = () => download(`drill-log-backup-${todayKey()}.json`, JSON.stringify(state, null, 1));
+$('importBtn').onclick = () => $('importFile').click();
+$('importFile').onchange = async e => {
+  const file = e.target.files[0]; if(!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    if(!Array.isArray(data.tasks) || typeof data.logs !== 'object') throw new Error('bad');
+    if(!confirm('Replace everything on this phone with this backup?')) return;
+    state = data; save(); viewDate = todayKey(); render(); toast('Backup restored');
+  } catch(err) { toast('That file is not a Drill Log backup'); }
+  e.target.value = '';
+};
+$('importTasksBtn').onclick = () => $('importTasksFile').click();
+$('importTasksFile').onchange = async e => {
+  const file = e.target.files[0]; if(!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    const ok = Array.isArray(data.tasks) && data.tasks.every(t => t && t.id && t.name && t.target > 0 && t.times);
+    if(!ok) throw new Error('bad');
+    if(state.tasks.length && !confirm(`Replace your ${state.tasks.length} tasks with the ${data.tasks.length} in this file? Scores and streaks stay.`)) return;
+    state.tasks = data.tasks.map(t => ({ id:String(t.id), name:String(t.name), target:Number(t.target), unit:String(t.unit||''), step:Number(t.step)||1, times:t.times }));
+    if(data.utc_offset) state.utc_offset = data.utc_offset;
+    save(); render(); toast(`Loaded ${state.tasks.length} tasks`);
+  } catch(err) { toast('That file is not a tasks.json task list'); }
+  e.target.value = '';
+};
+
+$('resetAll').onclick = async () => {
+  if(!confirm('Erase all tasks, scores and streaks on this phone? This cannot be undone.')) return;
+  try { localStorage.removeItem(KEY); } catch(e) {}
+  await init(); show('today'); toast('Erased. Starting fresh.');
+};
+
+let toastTimer;
+function toast(msg){ const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600); }
+
+// Refresh when the app comes back to the foreground (day may have changed)
+document.addEventListener('visibilitychange', () => { if(!document.hidden){ const t = todayKey(); if(viewDate > t) viewDate = t; render(); } });
+
+if('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+init();
+})();
+</script>
+</body>
+</html>
