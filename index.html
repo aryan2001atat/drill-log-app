@@ -84,7 +84,20 @@ svg.i{width:1em;height:1em;fill:currentColor;flex:none}
 .datebar h2 small{display:block;font-size:14px;font-weight:500;color:var(--muted)}
 .iconbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:42px;height:42px;display:grid;place-items:center;font-size:22px;line-height:1}
 .iconbtn:disabled{opacity:.3;cursor:default}
-.jump{display:block;margin:0 auto 6px;border:0;background:none;color:var(--primary);font-weight:600;text-decoration:underline;padding:4px}
+.dayacts{display:flex;justify-content:center;gap:22px;margin:0 0 6px}
+#edHint{text-align:center;margin:0 0 8px}
+.once{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700;vertical-align:1px;white-space:nowrap}
+.skipped{color:var(--muted);font-size:14px;margin:4px 0 0}
+.ed{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid var(--accent);background:var(--surface);border-radius:var(--radius);color:var(--ink)}
+.blk-card.ed{border-style:dashed;color:var(--ink)}
+.ed b{display:block;font-size:17px;font-weight:700}
+.ed small{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.ed svg{color:var(--accent);font-size:20px}
+.item.edrow{align-items:center}
+.item.edrow .when{padding-top:0}
+.item.edrow .node{margin-top:0}
+#view-today.plan .ctrl,#view-today.plan .tick,#view-today.plan .rt-row,#view-today.plan .rt-status{display:none}
+.jump{display:block;margin:0;border:0;background:none;color:var(--primary);font-weight:600;text-decoration:underline;padding:4px}
 
 /* ---------- Timeline ---------- */
 .timeline{position:relative;padding:8px 0 4px}
@@ -244,6 +257,7 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
   <symbol id="i-x" viewBox="0 0 24 24"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6 10.6 12 5 6.4z"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8-1.4 1.4zm11.4 11.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4l2.8-2.8 1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M14.5 2.5a9.5 9.5 0 1 0 7 15.9A8 8 0 0 1 14.5 2.5z"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M3 17.3V21h3.7L17.8 9.9l-3.7-3.7zM20.7 7a1 1 0 0 0 0-1.4l-2.3-2.3a1 1 0 0 0-1.4 0l-1.8 1.8 3.7 3.7z"/></symbol>
   <symbol id="i-today" viewBox="0 0 24 24"><path d="M4 5h2v2H4zm4 0h12v2H8zM4 11h2v2H4zm4 0h12v2H8zm-4 6h2v2H4zm4 0h12v2H8z"/></symbol>
   <symbol id="i-cal" viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3zm12 8H5v9h14zM7 12h3v3H7z"/></symbol>
   <symbol id="i-tasks" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="2" rx="1"/><circle cx="15" cy="7" r="3"/><rect x="3" y="16" width="18" height="2" rx="1"/><circle cx="9" cy="17" r="3"/></symbol>
@@ -274,7 +288,8 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
       <h2 id="dayTitle">Today</h2>
       <button class="iconbtn" id="nextDay" aria-label="Next day">›</button>
     </div>
-    <button class="jump" id="backToday" hidden>Back to today</button>
+    <div class="dayacts"><button class="jump" id="backToday" hidden>Back to today</button><button class="jump" id="editSched" aria-pressed="false">Edit schedule</button></div>
+    <p class="note" id="edHint" hidden></p>
     <div class="timeline" id="taskList"></div>
     <div id="anyList"></div>
   </section>
@@ -390,6 +405,7 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
     </div>
     <label class="field"><span>How long it takes, in minutes (optional)</span><input name="duration" type="number" min="0" step="5" inputmode="numeric" placeholder="e.g. 30"></label>
     <p style="font-weight:600;margin:14px 0 2px">Days and start time</p>
+    <p class="note" id="editScope" style="margin:0 0 4px;color:var(--accent);font-weight:600" hidden></p>
     <p class="note" style="margin-top:0">Tick the days it happens. A blank time means any time that day, with no reminder.</p>
     <div class="days" id="dayInputs"></div>
     <div class="btns"><button type="button" class="btn ghost" id="copyMon">Copy Monday to Tue–Fri</button></div>
@@ -414,6 +430,23 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
       <button type="button" class="btn danger" id="rtDelete">Delete</button>
       <span style="display:flex;gap:8px">
         <button type="button" class="btn ghost" id="rtCancel">Cancel</button>
+        <button type="submit" class="btn">Save</button>
+      </span>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="odDlg">
+  <form method="dialog" id="odForm">
+    <h3 id="odTitle"></h3>
+    <p class="note" id="odSub"></p>
+    <div id="odFields"></div>
+    <label class="dchk" style="display:flex;align-items:center;gap:10px;margin:12px 0;font-weight:600"><input type="checkbox" name="skip" style="width:20px;height:20px;accent-color:var(--primary)"><span id="odSkipLbl">Skip it this day</span></label>
+    <div class="btns"><button type="button" class="btn ghost" id="odWeekly">Change every Monday instead</button></div>
+    <div class="btns" style="justify-content:space-between;margin-top:12px">
+      <button type="button" class="btn ghost" id="odReset">Back to usual</button>
+      <span style="display:flex;gap:8px;margin-left:auto">
+        <button type="button" class="btn ghost" id="odCancel">Cancel</button>
         <button type="submit" class="btn">Save</button>
       </span>
     </div>
@@ -540,11 +573,19 @@ function migrate(){
   if(state.passMark == null) state.passMark = 5;
   if(!state.routine) state.routine = defaultRoutine();
   if(!state.sleep) state.sleep = {};
+  if(!state.overrides || typeof state.overrides !== 'object') state.overrides = {};
   state.tasks = (state.tasks || []).map(normTask);
 }
 
 // ---------- scoring ----------
-const scheduledOn = (task,k) => !!(task.days && task.days[dayCode(k)]);
+// One-off changes for a single date sit on top of the weekly pattern
+const ov = k => (state.overrides && state.overrides[k]) || {};
+const taskOv = (t,k) => (ov(k).tasks || {})[t.id];
+const blockOv = (b,k) => (ov(k).blocks || {})[b.id];
+const scheduledOn = (task,k) => { const o = taskOv(task,k); if(o && o.skip) return false; return !!(task.days && task.days[dayCode(k)]); };
+const timeOn = (t,k) => { const o = taskOv(t,k); return o && o.time !== undefined ? o.time : (t.times[dayCode(k)] || ''); };
+const durOn = (t,k) => { const o = taskOv(t,k); return o && o.duration != null ? o.duration : (t.duration || 0); };
+const blockOn = (b,k) => { const o = blockOv(b,k); return o !== undefined ? o : (b.times[dayCode(k)] || ''); };
 const entry = (k,id) => state.logs[k] && state.logs[k][id];
 function scoreOf(k,task){
   const e = entry(k,task.id); if(!e) return 0;
@@ -587,7 +628,7 @@ const bestStreak = () => bestRun(k => dayTasks(k).length > 0, dayMet);
 
 // ---------- wake-up and bedtime ----------
 const GRACE = 15;
-const rtTarget = (kind,k) => (state.routine[kind] || {})[dayCode(k)] || '';
+const rtTarget = (kind,k) => { const o = ov(k)[kind]; return o !== undefined ? o : ((state.routine[kind] || {})[dayCode(k)] || ''); };
 const slog = k => state.sleep[k] || {};
 const bedAdj = m => m < 720 ? m + 1440 : m;     // a bedtime after midnight belongs to the night before
 function lateBy(kind,k){
@@ -602,6 +643,7 @@ function sleptMins(k){            // the night before day k
   const m = toMin(w) + 1440 - bedAdj(toMin(b)); return m > 0 && m < 1200 ? m : null;
 }
 function setRt(kind, k, val){
+  if(k > todayKey()){ toast('You can log this once the day starts'); render(); return; }
   const before = rtStreak(kind);
   const e = Object.assign({}, slog(k)); if(val) e[kind] = val; else delete e[kind];
   if(Object.keys(e).length) state.sleep[k] = e; else delete state.sleep[k];
@@ -672,13 +714,13 @@ function dayRows(k){
   const adj = m => (wake && m < base) ? m + 1440 : m;
   if(wake) rows.push({kind:'wake', s:base, e:base});
   for(const b of state.routine.blocks){
-    const v = b.times[code]; if(!v) continue;
+    const v = blockOn(b,k); if(!v) continue;
     const [st,et] = v.split('-'); const S = adj(toMin(st)); const len = (toMin(et) - toMin(st) + 1440) % 1440;
     rows.push({kind:'block', b, s:S, e:S + len, st, et});
   }
   for(const t of dayTasks(k)){
-    const tm = t.times[code]; if(!tm) continue;
-    const S = adj(toMin(tm)); rows.push({kind:'task', t, s:S, e:S + (t.duration || 0), st:tm});
+    const tm = timeOn(t,k); if(!tm) continue;
+    const S = adj(toMin(tm)); rows.push({kind:'task', t, s:S, e:S + durOn(t,k), st:tm});
   }
   if(bed){ const S = adj(toMin(bed)); rows.push({kind:'sleep', s:S, e:S}); }
   const order = {wake:0, block:1, task:2, sleep:3};
@@ -698,7 +740,8 @@ function taskHTML(t, k, start, isToday, nowM){
   const due = isToday && !isFull && start && toMin(start) <= nowM;
   const st = taskStreak(t);
   const chip = `<span class="chip ${st?'':'zero'}" aria-label="${st} day streak">${icon('flame')}${st}</span>`;
-  const range = start ? (t.duration ? fmtRange(start, fromMin(toMin(start) + t.duration)) : time12(start)) : (t.duration ? `About ${fmtDur(t.duration)}` : '');
+  const dur = durOn(t,k), once = taskOv(t,k) ? '<span class="once">This day only</span>' : '';
+  const range = (start ? (dur ? fmtRange(start, fromMin(toMin(start) + dur)) : time12(start)) : (dur ? `About ${fmtDur(dur)}` : '')) + once;
   if(t.kind === 'check'){
     return `<article class="item check ${isFull?'full':''} ${due?'due':''}" data-id="${esc(t.id)}">
       ${whenCol(start)}
@@ -736,7 +779,7 @@ function taskHTML(t, k, start, isToday, nowM){
 
 function rtHTML(kind, k, isToday){
   const tgt = rtTarget(kind,k), act = slog(k)[kind] || '', late = lateBy(kind,k), st = rtStreak(kind);
-  const label = kind === 'wake' ? 'Wake up' : 'Bedtime', verb = kind === 'wake' ? 'Woke at' : 'Slept at';
+  const label = (kind === 'wake' ? 'Wake up' : 'Bedtime') + (ov(k)[kind] !== undefined ? '<span class="once">This day only</span>' : ''), verb = kind === 'wake' ? 'Woke at' : 'Slept at';
   let status = 'Not logged', cls = '';
   if(late != null){
     if(late <= GRACE){ cls = 'ok'; status = late < -GRACE ? `${fmtDur(-late)} early` : 'On time'; }
@@ -755,16 +798,35 @@ function rtHTML(kind, k, isToday){
   </article>`;
 }
 
+let editMode = false;
+function editRowHTML(r, k){
+  const row = (tm, node, attr, title, sub) => `<div class="item edrow">${whenCol(tm)}${node}<button class="card ed" ${attr}><span><b>${title}</b>${sub ? `<small>${sub}</small>` : ''}</span>${icon('pen')}</button></div>`;
+  if(r.kind === 'task'){
+    const t = r.t, what = t.kind === 'check' ? 'Done / not done' : `${fmt1(t.target)} ${esc(t.unit)}`;
+    const dur = durOn(t,k), when = (r.st ? (dur ? fmtRange(r.st, fromMin(toMin(r.st) + dur)) : time12(r.st)) : 'Any time') + (taskOv(t,k) ? '<span class="once">This day only</span>' : '');
+    return row(r.st, '<div class="node"></div>', `data-edit-task="${esc(t.id)}"`, esc(t.name), `${when}. ${what}`);
+  }
+  if(r.kind === 'block') return `<div class="blk">${whenCol(r.st)}<div class="node sq"></div><button class="blk-card ed" data-edit-blk="${esc(r.b.id)}"><span><b>${esc(r.b.name)}</b><small>${fmtRange(r.st, r.et)}${blockOv(r.b,k) !== undefined ? '<span class="once">This day only</span>' : ''}</small></span>${icon('pen')}</button></div>`;
+  const tgt = rtTarget(r.kind, k);
+  return row(tgt, `<div class="node rtn">${icon(r.kind === 'wake' ? 'sun' : 'moon')}</div>`, `data-edit-rt="${r.kind}"`, r.kind === 'wake' ? 'Wake up' : 'Bedtime', time12(tgt) + (ov(k)[r.kind] !== undefined ? '<span class="once">This day only</span>' : ''));
+}
+
 function renderToday(){
-  const k = viewDate, today = todayKey(), isToday = k === today, d = fromKey(k);
-  $('dayTitle').innerHTML = isToday
-    ? `Today<small>${d.toLocaleDateString('en-IN',{weekday:'long', day:'numeric', month:'short'})}</small>`
+  const k = viewDate, today = todayKey(), isToday = k === today, d = fromKey(k), isFuture = k > today;
+  const longDate = d.toLocaleDateString('en-IN',{weekday:'long', day:'numeric', month:'short'});
+  $('dayTitle').innerHTML = isToday ? `Today<small>${longDate}</small>`
+    : isFuture ? `Tomorrow<small>${longDate}</small>`
     : `${d.toLocaleDateString('en-IN',{weekday:'long'})}<small>${d.toLocaleDateString('en-IN',{day:'numeric', month:'short', year:'numeric'})}</small>`;
-  $('nextDay').disabled = k >= today;
+  $('nextDay').disabled = k >= addDays(today,1);
   $('backToday').hidden = isToday;
+  $('editSched').textContent = editMode ? 'Done editing' : 'Edit schedule';
+  $('editSched').setAttribute('aria-pressed', String(editMode));
+  $('edHint').hidden = !editMode;
+  $('edHint').textContent = `Tap anything to change it for ${d.toLocaleDateString('en-IN',{day:'numeric', month:'short'})} only, or for every ${DAY_NAMES[dayCode(k)]}.`;
+  $('view-today').classList.toggle('plan', isFuture && !editMode);
 
   const list = $('taskList'), anyEl = $('anyList'), code = dayCode(k);
-  const rows = dayRows(k), any = dayTasks(k).filter(t => !t.times[code]);
+  const rows = dayRows(k), any = dayTasks(k).filter(t => !timeOn(t,k));
   const nowM = toMin(nowHM());
   if(!rows.length && !any.length){
     list.classList.add('bare'); anyEl.innerHTML = '';
@@ -776,8 +838,9 @@ function renderToday(){
   let html = '', nowDone = !isToday;
   for(const r of rows){
     if(!nowDone && r.s > nowM){ html += nowLine(); nowDone = true; }
+    if(editMode && r.kind !== 'gap'){ html += editRowHTML(r, k); continue; }
     if(r.kind === 'task') html += taskHTML(r.t, k, r.st, isToday, nowM);
-    else if(r.kind === 'block') html += `<div class="blk">${whenCol(r.st)}<div class="node sq"></div><div class="blk-card"><b>${esc(r.b.name)}</b><span>${fmtRange(r.st, r.et)}</span></div></div>`;
+    else if(r.kind === 'block') html += `<div class="blk">${whenCol(r.st)}<div class="node sq"></div><div class="blk-card"><b>${esc(r.b.name)}${blockOv(r.b,k) !== undefined ? '<span class="once">This day only</span>' : ''}</b><span>${fmtRange(r.st, r.et)}</span></div></div>`;
     else if(r.kind === 'gap') html += `<div class="gap"><button class="gap-btn" data-gap-s="${fromMin(r.s)}" data-gap-len="${r.e - r.s}"><span>Free ${fmtRange(fromMin(r.s), fromMin(r.e))}<small>${fmtDur(r.e - r.s)}</small></span><span>+ Add task</span></button></div>`;
     else html += rtHTML(r.kind, k, isToday);
   }
@@ -785,12 +848,23 @@ function renderToday(){
   list.innerHTML = html;
   list.classList.toggle('bare', !rows.length);
   const ts = dayTasks(k);
-  anyEl.innerHTML = (any.length ? `<h3 class="subh">Any time ${isToday ? 'today' : 'this day'}</h3><div class="timeline">${any.map(t => taskHTML(t, k, '', isToday, nowM)).join('')}</div>` : '')
-    + (ts.length && ts.every(t => full(k,t)) ? `<p class="allclear">All ${ts.length} tasks done${isToday?' today':''}.</p>` : '');
+  anyEl.innerHTML = (any.length ? `<h3 class="subh">Any time ${isToday ? 'today' : isFuture ? 'tomorrow' : 'this day'}</h3><div class="timeline">${any.map(t => editMode ? editRowHTML({kind:'task', t, st:''}, k) : taskHTML(t, k, '', isToday, nowM)).join('')}</div>` : '')
+    + (!editMode && !isFuture && ts.length && ts.every(t => full(k,t)) ? `<p class="allclear">All ${ts.length} tasks done${isToday?' today':''}.</p>` : '')
+    + skippedHTML(k);
+}
+function skippedHTML(k){
+  const items = [];
+  state.tasks.forEach(t => { const o = taskOv(t,k); if(o && o.skip && t.days[dayCode(k)]) items.push({type:'task', id:t.id, name:t.name}); });
+  state.routine.blocks.forEach(b => { if(blockOv(b,k) === '' && b.times[dayCode(k)]) items.push({type:'block', id:b.id, name:b.name}); });
+  ['wake','sleep'].forEach(kind => { if(ov(k)[kind] === '' && state.routine[kind][dayCode(k)]) items.push({type:kind, id:kind, name: kind === 'wake' ? 'Wake up' : 'Bedtime'}); });
+  if(!items.length) return '';
+  if(!editMode) return `<p class="skipped">Skipped this day: ${items.map(i => esc(i.name)).join(', ')}</p>`;
+  return `<h3 class="subh">Skipped this day</h3>` + items.map(i => `<button class="card ed" style="margin-bottom:8px" data-od-type="${i.type}" data-od-id="${esc(i.id)}"><span><b>${esc(i.name)}</b><small>Tap to bring it back</small></span>${icon('pen')}</button>`).join('');
 }
 
 function setValue(id, v){
   const k = viewDate; const t = state.tasks.find(x => x.id === id); if(!t) return;
+  if(k > todayKey()){ toast('You can log this once the day starts'); return; }
   const wasMet = met(k,t), wasDayMet = dayMet(k), wasAll = dayTasks(k).every(x => full(k,x));
   const before = overallStreak();
   v = Math.max(0, Math.round(v*100)/100);
@@ -910,7 +984,8 @@ function show(v){
 // ---------- events ----------
 document.querySelectorAll('nav.tabs button').forEach(b => b.addEventListener('click', () => show(b.dataset.view)));
 $('prevDay').onclick = () => { viewDate = addDays(viewDate,-1); render(); };
-$('nextDay').onclick = () => { if(viewDate < todayKey()){ viewDate = addDays(viewDate,1); render(); } };
+$('nextDay').onclick = () => { if(viewDate < addDays(todayKey(),1)){ viewDate = addDays(viewDate,1); render(); } };
+$('editSched').onclick = () => { editMode = !editMode; renderToday(); };
 $('backToday').onclick = () => { viewDate = todayKey(); render(); };
 $('prevMonth').onclick = () => { const [y,m] = calMonth.split('-').map(Number); const d = new Date(y,m-2,1); calMonth = `${d.getFullYear()}-${pad(d.getMonth()+1)}`; render(); };
 $('nextMonth').onclick = () => { const [y,m] = calMonth.split('-').map(Number); const d = new Date(y,m,1); calMonth = `${d.getFullYear()}-${pad(d.getMonth()+1)}`; render(); };
@@ -918,7 +993,15 @@ $('cal').addEventListener('click', e => { const b = e.target.closest('button[dat
 
 $('view-today').addEventListener('click', e => {
   const gap = e.target.closest('[data-gap-s]');
-  if(gap){ openEditor(null, { day: dayCode(viewDate), start: gap.dataset.gapS, duration: Math.min(Number(gap.dataset.gapLen), 60) }); return; }
+  if(gap){ openEditor(null, { day: dayCode(viewDate), start: gap.dataset.gapS, duration: Math.min(Number(gap.dataset.gapLen), 60) }, dayCode(viewDate)); return; }
+  const et = e.target.closest('[data-edit-task]');
+  if(et){ openOneOff('task', et.dataset.editTask); return; }
+  const eb = e.target.closest('[data-edit-blk]');
+  if(eb){ openOneOff('block', eb.dataset.editBlk); return; }
+  const er = e.target.closest('[data-edit-rt]');
+  if(er){ openOneOff(er.dataset.editRt, er.dataset.editRt); return; }
+  const sk = e.target.closest('[data-od-type]');
+  if(sk){ openOneOff(sk.dataset.odType, sk.dataset.odId); return; }
   const nowBtn = e.target.closest('[data-rt-now]');
   if(nowBtn){
     const kind = nowBtn.dataset.rtNow; let k = viewDate; const hm = nowHM();
@@ -964,7 +1047,9 @@ function setKind(kind){
   ['target','unit','step'].forEach(n => $('editForm')[n].required = kind !== 'check');
 }
 function syncDayInputs(){ const f = $('editForm'); WEEK.forEach(d => f['time-'+d].disabled = !f['on-'+d].checked); }
-function openEditor(id, pre){
+const scopeText = day => day ? `Opened from ${DAY_NAMES[day]}. Times repeat weekly, so changing ${DAY_NAMES[day]} changes every ${DAY_NAMES[day]}.` : '';
+function openEditor(id, pre, day){
+  $('editScope').textContent = scopeText(day); $('editScope').hidden = !day;
   editingId = id; const f = $('editForm');
   const t = id ? state.tasks.find(x => x.id === id)
     : normTask({ id:'_new', name:'', kind:'amount', target:'', unit:'minutes', step:1, duration: pre ? pre.duration : '', times:{}, days:{} });
@@ -1015,14 +1100,76 @@ $('editForm').addEventListener('submit', e => {
   toast(WEEK.some(d => times[d]) ? 'Saved. Copy the reminder file to update reminders.' : 'Saved');
 });
 
+// One-off change for the date being viewed
+let od = null;
+function openOneOff(type, id){
+  const k = viewDate, d = dayCode(k), f = $('odForm');
+  const dateTxt = fromKey(k).toLocaleDateString('en-IN',{weekday:'long', day:'numeric', month:'short'});
+  let title = '', fields = '', skip = false, has = false, skipLbl = 'Skip it this day';
+  if(type === 'task'){
+    const t = state.tasks.find(x => x.id === id); if(!t) return; const o = taskOv(t,k);
+    has = !!o; skip = !!(o && o.skip); title = t.name;
+    const st = (o && o.skip) ? (t.times[d] || '') : timeOn(t,k), du = (o && o.skip) ? t.duration : durOn(t,k);
+    fields = `<div class="two"><label class="field"><span>Start time</span><input type="time" name="s" value="${st}"></label>
+      <label class="field"><span>Minutes</span><input type="number" name="dur" min="0" step="5" inputmode="numeric" value="${du || ''}"></label></div>
+      <p class="note">Leave the start time blank to do it any time that day.</p>`;
+    skipLbl = 'Skip it this day (its streak isn’t broken)';
+  } else if(type === 'block'){
+    const b = state.routine.blocks.find(x => x.id === id); if(!b) return; const o = blockOv(b,k);
+    has = o !== undefined; skip = o === ''; title = b.name;
+    const v = blockOn(b,k) || b.times[d] || ''; const [st,et] = v ? v.split('-') : ['',''];
+    fields = `<div class="two"><label class="field"><span>Start</span><input type="time" name="s" value="${st}"></label><label class="field"><span>End</span><input type="time" name="e" value="${et}"></label></div>`;
+    skipLbl = 'Not happening this day';
+  } else {
+    const o = ov(k)[type]; has = o !== undefined; skip = o === '';
+    title = type === 'wake' ? 'Wake up' : 'Bedtime';
+    fields = `<label class="field"><span>Time</span><input type="time" name="s" value="${rtTarget(type,k) || state.routine[type][d] || ''}"></label>`;
+    skipLbl = type === 'wake' ? 'No wake-up target this day' : 'No bedtime target this day';
+  }
+  od = { type, id, k };
+  $('odTitle').textContent = title;
+  $('odSub').textContent = `Changes ${dateTxt} only. Other ${DAY_NAMES[d]}s stay as usual.`;
+  $('odFields').innerHTML = fields; f.skip.checked = skip; $('odSkipLbl').textContent = skipLbl;
+  $('odWeekly').textContent = `Change every ${DAY_NAMES[d]} instead`;
+  $('odReset').hidden = !has;
+  $('odDlg').showModal();
+}
+function clearOv(type, id, k){
+  const day = state.overrides[k]; if(!day) return;
+  if(type === 'task' && day.tasks){ delete day.tasks[id]; if(!Object.keys(day.tasks).length) delete day.tasks; }
+  else if(type === 'block' && day.blocks){ delete day.blocks[id]; if(!Object.keys(day.blocks).length) delete day.blocks; }
+  else delete day[type];
+  if(!Object.keys(day).length) delete state.overrides[k];
+}
+$('odForm').addEventListener('submit', e => {
+  e.preventDefault(); const f = e.target, { type, id, k } = od, skip = f.skip.checked;
+  const day = state.overrides[k] || (state.overrides[k] = {});
+  if(type === 'task'){
+    day.tasks = day.tasks || {};
+    if(skip) day.tasks[id] = { skip:true };
+    else { const du = parseInt(f.dur.value, 10); day.tasks[id] = { time: f.s.value || '', duration: isNaN(du) ? 0 : Math.max(0, du) }; }
+  } else if(type === 'block'){
+    day.blocks = day.blocks || {};
+    if(skip) day.blocks[id] = '';
+    else { if(!f.s.value || !f.e.value){ toast('Add both start and end'); return; } day.blocks[id] = `${f.s.value}-${f.e.value}`; }
+  } else day[type] = skip ? '' : (f.s.value || '');
+  save(); $('odDlg').close(); render(); toast(skip ? 'Skipped for this day only' : 'Changed for this day only');
+});
+$('odReset').onclick = () => { const { type, id, k } = od; clearOv(type, id, k); save(); $('odDlg').close(); render(); toast('Back to the usual plan'); };
+$('odCancel').onclick = () => $('odDlg').close();
+$('odWeekly').onclick = () => {
+  const { type, id, k } = od, d = dayCode(k); $('odDlg').close();
+  if(type === 'task') openEditor(id, null, d); else openRt(id, d);
+};
+
 // Routine editor (wake-up, bedtime, fixed blocks)
 let rtEditing = null;
-function openRt(key){
+function openRt(key, day){
   rtEditing = key; const f = $('rtForm'), point = key === 'wake' || key === 'sleep';
   const b = point ? null : key === '_new' ? { name:'', times:{} } : state.routine.blocks.find(x => x.id === key);
   $('rtTitle').textContent = key === 'wake' ? 'Wake-up time' : key === 'sleep' ? 'Bedtime' : key === '_new' ? 'New fixed time' : 'Edit fixed time';
   $('rtNameWrap').hidden = point; f.name.required = !point; f.name.value = b ? b.name : '';
-  $('rtHint').textContent = point ? 'Leave a day blank to skip it.' : 'Set a start and end for each day. Leave both blank on days it doesn’t happen.';
+  $('rtHint').textContent = (point ? 'Leave a day blank to skip it.' : 'Set a start and end for each day. Leave both blank on days it doesn’t happen.') + (day ? ' ' + scopeText(day) : '');
   $('rtDays').innerHTML = WEEK.map(d => {
     const v = point ? (state.routine[key][d] || '') : (b.times[d] || '');
     const [st,et] = point ? [v,''] : (v ? v.split('-') : ['','']);
