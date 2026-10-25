@@ -323,7 +323,7 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
       <button class="btn ghost" id="importTasksBtn">Import task list</button>
       <input type="file" id="importTasksFile" accept="application/json,.json" hidden>
     </div>
-    <p class="note">Import task list loads a <b>tasks.json</b> file. Your scores and streaks are kept.</p>
+    <p class="note">Import task list loads a <b>tasks.json</b> file, including wake-up, bedtime and fixed times if it has them. Your scores and streaks are kept.</p>
 
     <h3>Daily routine</h3>
     <p class="note">Fixed parts of your day. They show on the Today timeline so you can see your free time.</p>
@@ -525,6 +525,16 @@ function normTask(t){
   return { id:String(t.id), name:String(t.name), kind,
     target: kind === 'check' ? 1 : Number(t.target), unit: kind === 'check' ? 'done' : String(t.unit || ''),
     step: kind === 'check' ? 1 : (Number(t.step) || 1), duration, days, times };
+}
+function normRoutine(r){
+  const def = defaultRoutine(), okT = v => typeof v === 'string' && /^\d\d:\d\d$/.test(v), okR = v => typeof v === 'string' && /^\d\d:\d\d-\d\d:\d\d$/.test(v);
+  const pick = (m, ok) => Object.fromEntries(WEEK.map(d => [d, m && ok(m[d]) ? m[d] : '']));
+  if(!r || typeof r !== 'object') return def;
+  return {
+    wake: r.wake ? pick(r.wake, okT) : def.wake,
+    sleep: r.sleep ? pick(r.sleep, okT) : def.sleep,
+    blocks: Array.isArray(r.blocks) ? r.blocks.filter(b => b && b.name).map((b,i) => ({ id: String(b.id || `block-${i+1}`), name: String(b.name), times: pick(b.times, okR) })) : def.blocks
+  };
 }
 function migrate(){
   if(state.passMark == null) state.passMark = 5;
@@ -1054,7 +1064,7 @@ $('rtForm').addEventListener('submit', e => {
 
 // Reminder file
 function reminderJSON(){
-  return JSON.stringify({ utc_offset: state.utc_offset || '+05:30', tasks: state.tasks.map(t => ({ id:t.id, name:t.name, kind:t.kind, target:t.target, unit:t.unit, step:t.step, duration:t.duration, days:t.days, times:t.times })) }, null, 2) + '\n';
+  return JSON.stringify({ utc_offset: state.utc_offset || '+05:30', routine: state.routine, tasks: state.tasks.map(t => ({ id:t.id, name:t.name, kind:t.kind, target:t.target, unit:t.unit, step:t.step, duration:t.duration, days:t.days, times:t.times })) }, null, 2) + '\n';
 }
 function download(name, text){
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text],{type:'application/json'})); a.download = name;
@@ -1074,10 +1084,12 @@ $('importTasksFile').onchange = async e => {
     const data = JSON.parse(await file.text());
     const ok = Array.isArray(data.tasks) && data.tasks.every(t => t && t.id && t.name && (t.kind === 'check' || t.target > 0) && (t.times || t.days));
     if(!ok) throw new Error('bad');
-    if(state.tasks.length && !confirm(`Replace your ${state.tasks.length} tasks with the ${data.tasks.length} in this file? Scores and streaks stay.`)) return;
+    const withRt = !!data.routine;
+    if(state.tasks.length && !confirm(`Replace your ${state.tasks.length} tasks${withRt ? ' and daily routine' : ''} with the ones in this file? Scores and streaks stay.`)) return;
     state.tasks = data.tasks.map(normTask);
+    if(withRt) state.routine = normRoutine(data.routine);
     if(data.utc_offset) state.utc_offset = data.utc_offset;
-    save(); render(); toast(`Loaded ${state.tasks.length} tasks`);
+    save(); render(); toast(`Loaded ${state.tasks.length} tasks${withRt ? ' and your routine' : ''}`);
   } catch(err) { toast('That file is not a tasks.json task list'); }
   e.target.value = '';
 };
