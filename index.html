@@ -131,6 +131,42 @@ svg.i{width:1em;height:1em;fill:currentColor;flex:none}
 .now .ln{height:2px;background:var(--accent);opacity:.6}
 
 .empty{padding:28px 4px;color:var(--muted)}
+.head .range,.ck .range{grid-column:1;color:var(--accent);font-size:14px;font-weight:700}
+.item.check .ck{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 10px;padding:12px 14px}
+.ck .name{font-weight:700;font-size:18px;line-height:1.2}
+.tick{grid-row:1 / span 3;grid-column:2;width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--bg);color:transparent;display:grid;place-items:center;font-size:24px}
+.tick.on{background:var(--met);border-color:var(--met);color:#fff}
+html[data-mode="dark"] .tick.on{color:var(--bg)}
+.blk,.gap{display:grid;grid-template-columns:52px 24px 1fr;column-gap:10px;align-items:center;margin-bottom:12px}
+.blk .when{padding-top:0}
+.node.sq{width:14px;height:14px;border-radius:4px;margin:0 auto;background:var(--line);box-shadow:0 0 0 4px var(--bg)}
+.node.sq::after{display:none}
+.blk-card{border:1px dashed var(--line);border-radius:var(--radius);padding:9px 14px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 10px;color:var(--muted);font-size:15px}
+.blk-card b{color:var(--ink);font-weight:600}
+.gap-btn{grid-column:3;border:1px dashed var(--accent);background:transparent;color:var(--accent);border-radius:var(--radius);padding:9px 14px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:600;font-size:15px}
+.gap-btn span:last-child{white-space:nowrap}
+.gap-btn small{display:block;font-weight:500;font-size:13px;opacity:.85}
+.node.rtn{background:var(--accent-soft)}
+.node.rtn::after{display:none}
+.node.rtn svg{color:var(--accent);font-size:15px}
+.rtcard{padding:12px 14px}
+.rt-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.rt-top .name{font-weight:700;font-size:18px}
+.rt-status{font-size:14px;font-weight:700;color:var(--muted)}
+.rt-status.ok{color:var(--met)}
+.rt-status.late{color:var(--miss)}
+.rt-row{display:flex;align-items:center;gap:8px;margin-top:10px}
+.rt-row label{flex:1;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:15px;min-width:0}
+.rt-row input{height:42px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;font-weight:700;flex:1;min-width:0}
+.btn.sm{padding:9px 14px}
+.rt-sub{margin-top:8px;color:var(--muted);font-size:14px}
+.subh{font-size:16px;color:var(--muted);font-weight:700;margin:18px 0 8px}
+.days .dchk{display:flex;align-items:center;gap:8px;font-weight:500}
+.days input[type="checkbox"]{width:20px;height:20px;accent-color:var(--primary)}
+.days input[type="time"]:disabled{opacity:.35}
+.days3{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px 8px;align-items:center}
+.days3 input{height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 6px;width:100%;min-width:0}
+.stats.sm b{font-size:19px}
 .allclear{text-align:center;padding:10px 0 4px;color:var(--met);font-weight:700}
 
 /* ---------- Calendar ---------- */
@@ -206,6 +242,8 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
   <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12.6 1.5c.6 3.3-.9 5.3-2.6 7.2C8.3 10.6 6 12.6 6 16a6 6 0 0 0 12 0c0-2.7-1.2-4.6-2.4-6.1 0 1.6-.7 2.9-1.8 3.5.6-3.8-.4-8.6-1.2-11.9zM12 21.2a2.8 2.8 0 0 1-2.8-2.8c0-1.6 1.2-2.6 2.2-3.6.3 1 1 1.6 1.7 2.2.6.5 1.7 1.1 1.7 1.4a2.8 2.8 0 0 1-2.8 2.8z" fill-rule="evenodd"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.2 16.6 4.8 12.2l-1.6 1.6 6 6L21 8l-1.6-1.6z"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6 10.6 12 5 6.4z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8-1.4 1.4zm11.4 11.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4l2.8-2.8 1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M14.5 2.5a9.5 9.5 0 1 0 7 15.9A8 8 0 0 1 14.5 2.5z"/></symbol>
   <symbol id="i-today" viewBox="0 0 24 24"><path d="M4 5h2v2H4zm4 0h12v2H8zM4 11h2v2H4zm4 0h12v2H8zm-4 6h2v2H4zm4 0h12v2H8z"/></symbol>
   <symbol id="i-cal" viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3zm12 8H5v9h14zM7 12h3v3H7z"/></symbol>
   <symbol id="i-tasks" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="2" rx="1"/><circle cx="15" cy="7" r="3"/><rect x="3" y="16" width="18" height="2" rx="1"/><circle cx="9" cy="17" r="3"/></symbol>
@@ -238,6 +276,7 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
     </div>
     <button class="jump" id="backToday" hidden>Back to today</button>
     <div class="timeline" id="taskList"></div>
+    <div id="anyList"></div>
   </section>
 
   <section id="view-calendar" hidden>
@@ -263,6 +302,17 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
       <thead><tr><th>Task</th><th>Now</th><th>Best</th><th>Month avg</th></tr></thead>
       <tbody id="taskStats"></tbody>
     </table>
+    <h3>Sleep</h3>
+    <div class="stats sm">
+      <div><b id="slWake">–</b><span>average wake-up</span></div>
+      <div><b id="slBed">–</b><span>average bedtime</span></div>
+      <div><b id="slDur">–</b><span>average sleep</span></div>
+    </div>
+    <table class="ts">
+      <thead><tr><th>On time</th><th>Now</th><th>Best</th><th>This month</th></tr></thead>
+      <tbody id="sleepStats"></tbody>
+    </table>
+    <p class="note">On time means within 15 minutes of the set time.</p>
   </section>
 
   <section id="view-tasks" hidden>
@@ -274,6 +324,11 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
       <input type="file" id="importTasksFile" accept="application/json,.json" hidden>
     </div>
     <p class="note">Import task list loads a <b>tasks.json</b> file. Your scores and streaks are kept.</p>
+
+    <h3>Daily routine</h3>
+    <p class="note">Fixed parts of your day. They show on the Today timeline so you can see your free time.</p>
+    <div id="routineRows"></div>
+    <div class="btns"><button class="btn ghost" id="addBlock">Add fixed time</button></div>
 
     <h3>Theme</h3>
     <div class="seg" role="radiogroup" aria-label="Theme" id="modeSeg">
@@ -321,19 +376,45 @@ nav.tabs button[aria-selected="true"] svg{color:var(--accent)}
   <form method="dialog" id="editForm">
     <h3 id="editTitle">Edit task</h3>
     <label class="field"><span>Name</span><input name="name" required maxlength="40"></label>
-    <div class="two">
-      <label class="field"><span>Daily target</span><input name="target" type="number" min="0.1" step="any" required inputmode="decimal"></label>
-      <label class="field"><span>Unit</span><input name="unit" required maxlength="20" placeholder="minutes, km, pages"></label>
+    <p style="font-weight:600;margin:12px 0 6px">How is it tracked?</p>
+    <div class="seg" role="radiogroup" aria-label="How is it tracked" id="kindSeg" style="grid-template-columns:1fr 1fr">
+      <button type="button" role="radio" data-kind="amount">Amount</button>
+      <button type="button" role="radio" data-kind="check">Done / not done</button>
     </div>
-    <label class="field"><span>Plus/minus button adds</span><input name="step" type="number" min="0.1" step="any" required inputmode="decimal"></label>
-    <p style="font-weight:600;margin:14px 0 6px">Reminder time per day (leave blank for a day off)</p>
+    <div id="amountFields">
+      <div class="two">
+        <label class="field"><span>Daily target</span><input name="target" type="number" min="0.1" step="any" required inputmode="decimal"></label>
+        <label class="field"><span>Unit</span><input name="unit" required maxlength="20" placeholder="minutes, km, pages"></label>
+      </div>
+      <label class="field"><span>Plus/minus button adds</span><input name="step" type="number" min="0.1" step="any" required inputmode="decimal"></label>
+    </div>
+    <label class="field"><span>How long it takes, in minutes (optional)</span><input name="duration" type="number" min="0" step="5" inputmode="numeric" placeholder="e.g. 30"></label>
+    <p style="font-weight:600;margin:14px 0 2px">Days and start time</p>
+    <p class="note" style="margin-top:0">Tick the days it happens. A blank time means any time that day, with no reminder.</p>
     <div class="days" id="dayInputs"></div>
-    <div class="btns"><button type="button" class="btn ghost" id="copyMon">Copy Monday's time to Tue–Fri</button></div>
+    <div class="btns"><button type="button" class="btn ghost" id="copyMon">Copy Monday to Tue–Fri</button></div>
     <div class="btns" style="justify-content:space-between;margin-top:16px">
       <button type="button" class="btn danger" id="deleteTask">Delete task</button>
       <span style="display:flex;gap:8px">
         <button type="button" class="btn ghost" id="cancelEdit">Cancel</button>
         <button type="submit" class="btn" value="save">Save</button>
+      </span>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="rtDlg">
+  <form method="dialog" id="rtForm">
+    <h3 id="rtTitle">Fixed time</h3>
+    <label class="field" id="rtNameWrap"><span>Name</span><input name="name" maxlength="40" placeholder="Office, Gym, Lunch"></label>
+    <p class="note" id="rtHint"></p>
+    <div class="days3" id="rtDays"></div>
+    <div class="btns"><button type="button" class="btn ghost" id="rtCopyMon">Copy Monday to Tue–Fri</button></div>
+    <div class="btns" style="justify-content:space-between;margin-top:16px">
+      <button type="button" class="btn danger" id="rtDelete">Delete</button>
+      <span style="display:flex;gap:8px">
+        <button type="button" class="btn ghost" id="rtCancel">Cancel</button>
+        <button type="submit" class="btn">Save</button>
       </span>
     </div>
   </form>
@@ -402,15 +483,58 @@ async function init(){
     state = { version:1, startDate: todayKey(), passMark:5, utc_offset: seed.utc_offset||'+05:30', tasks: seed.tasks||[], logs:{} };
     save();
   }
-  if(state.passMark == null) state.passMark = 5;
+  migrate(); save();
   viewDate = todayKey();
   buildPassMark();
   applyLook();
   render();
 }
 
+// ---------- time helpers ----------
+const toMin = t => { const [h,m] = t.split(':').map(Number); return h*60 + m; };
+const fromMin = m => { m = ((Math.round(m) % 1440) + 1440) % 1440; return `${pad(Math.floor(m/60))}:${pad(m%60)}`; };
+function fmtRange(a,b){ const [x,p] = split12(a), [y,q] = split12(b); return p === q ? `${x} – ${y} ${q}` : `${x} ${p} – ${y} ${q}`; }
+const fmtDur = m => m >= 60 ? `${Math.floor(m/60)}h${m%60 ? ` ${m%60}m` : ''}` : `${m} min`;
+const shortDay = d => DAY_NAMES[d].slice(0,3);
+
+// ---------- data shape and defaults ----------
+const DEFAULT_DURATION = {'ssb-prep':60,'current-affairs':30,'push-ups':15,'running':45,'ssb-revision':45,'book-reading':30,'job-prep':120};
+const everyDay = v => Object.fromEntries(WEEK.map(d => [d, v]));
+const weekly = (wk, sat, sun) => ({mon:wk, tue:wk, wed:wk, thu:wk, fri:wk, sat, sun});
+function defaultRoutine(){
+  return {
+    wake: weekly('06:30','06:30','08:00'),
+    sleep: everyDay('23:30'),
+    blocks: [
+      {id:'breakfast', name:'Breakfast', times: weekly('08:15-08:45','08:15-08:45','')},
+      {id:'travel-office', name:'Travel to office', times: weekly('09:20-09:30','09:20-09:30','')},
+      {id:'office', name:'Office', times: weekly('09:30-18:30','09:30-15:30','')},
+      {id:'travel-home', name:'Travel home', times: weekly('18:30-18:40','15:30-15:40','')},
+      {id:'friend', name:'Time with friend', times: weekly('','15:40-20:00','')},
+      {id:'chores', name:'Chores and lunch', times: weekly('','','09:00-12:30')},
+      {id:'dinner', name:'Dinner and room cleaning', times: everyDay('20:00-21:00')},
+    ]
+  };
+}
+function normTask(t){
+  const kind = t.kind === 'check' ? 'check' : 'amount';
+  const times = {}, days = {};
+  WEEK.forEach(d => { const tm = (t.times && t.times[d]) || ''; days[d] = t.days ? !!t.days[d] : !!tm; times[d] = days[d] ? tm : ''; });
+  let duration = (t.duration === '' || t.duration == null) ? NaN : Number(t.duration);
+  if(!(duration >= 0)) duration = DEFAULT_DURATION[t.id] ?? (kind === 'amount' && /^min/i.test(t.unit || '') ? (Number(t.target) || 30) : 0);
+  return { id:String(t.id), name:String(t.name), kind,
+    target: kind === 'check' ? 1 : Number(t.target), unit: kind === 'check' ? 'done' : String(t.unit || ''),
+    step: kind === 'check' ? 1 : (Number(t.step) || 1), duration, days, times };
+}
+function migrate(){
+  if(state.passMark == null) state.passMark = 5;
+  if(!state.routine) state.routine = defaultRoutine();
+  if(!state.sleep) state.sleep = {};
+  state.tasks = (state.tasks || []).map(normTask);
+}
+
 // ---------- scoring ----------
-const scheduledOn = (task,k) => !!(task.times && task.times[dayCode(k)]);
+const scheduledOn = (task,k) => !!(task.days && task.days[dayCode(k)]);
 const entry = (k,id) => state.logs[k] && state.logs[k][id];
 function scoreOf(k,task){
   const e = entry(k,task.id); if(!e) return 0;
@@ -450,6 +574,36 @@ const taskStreak = t => streakBack(k => scheduledOn(t,k), k => met(k,t));
 const taskBest = t => bestRun(k => scheduledOn(t,k), k => met(k,t));
 const overallStreak = () => streakBack(k => dayTasks(k).length > 0, dayMet);
 const bestStreak = () => bestRun(k => dayTasks(k).length > 0, dayMet);
+
+// ---------- wake-up and bedtime ----------
+const GRACE = 15;
+const rtTarget = (kind,k) => (state.routine[kind] || {})[dayCode(k)] || '';
+const slog = k => state.sleep[k] || {};
+const bedAdj = m => m < 720 ? m + 1440 : m;     // a bedtime after midnight belongs to the night before
+function lateBy(kind,k){
+  const tgt = rtTarget(kind,k), act = slog(k)[kind]; if(!tgt || !act) return null;
+  return kind === 'sleep' ? bedAdj(toMin(act)) - bedAdj(toMin(tgt)) : toMin(act) - toMin(tgt);
+}
+const rtOnTime = (kind,k) => { const l = lateBy(kind,k); return l != null && l <= GRACE; };
+const rtStreak = kind => streakBack(k => !!rtTarget(kind,k), k => rtOnTime(kind,k));
+const rtBest = kind => bestRun(k => !!rtTarget(kind,k), k => rtOnTime(kind,k));
+function sleptMins(k){            // the night before day k
+  const b = slog(addDays(k,-1)).sleep, w = slog(k).wake; if(!b || !w) return null;
+  const m = toMin(w) + 1440 - bedAdj(toMin(b)); return m > 0 && m < 1200 ? m : null;
+}
+function setRt(kind, k, val){
+  const before = rtStreak(kind);
+  const e = Object.assign({}, slog(k)); if(val) e[kind] = val; else delete e[kind];
+  if(Object.keys(e).length) state.sleep[k] = e; else delete state.sleep[k];
+  if(val && k < state.startDate) state.startDate = k;
+  save(); render();
+  if(val){
+    const l = lateBy(kind,k), after = rtStreak(kind), what = kind === 'wake' ? 'Wake-up' : 'Bedtime';
+    if(l == null) toast(`${what} logged`);
+    else if(l <= GRACE) toast(after > before ? `${what} on time. ${after}-day streak` : `${what} on time`);
+    else toast(`${what} logged, ${fmtDur(l)} late`);
+  }
+}
 
 // ---------- rendering ----------
 let viewDate = null, calMonth = null, view = 'today';
@@ -500,6 +654,97 @@ function isCollapsed(k,t){
   return (toggled[k] && toggled[k].has(t.id)) ? !base : base;
 }
 
+// Everything with a time on day k, in order, with free gaps of 15+ minutes between wake-up and bedtime.
+function dayRows(k){
+  const code = dayCode(k), rows = [];
+  const wake = rtTarget('wake',k), bed = rtTarget('sleep',k);
+  const base = wake ? toMin(wake) : 0;
+  const adj = m => (wake && m < base) ? m + 1440 : m;
+  if(wake) rows.push({kind:'wake', s:base, e:base});
+  for(const b of state.routine.blocks){
+    const v = b.times[code]; if(!v) continue;
+    const [st,et] = v.split('-'); const S = adj(toMin(st)); const len = (toMin(et) - toMin(st) + 1440) % 1440;
+    rows.push({kind:'block', b, s:S, e:S + len, st, et});
+  }
+  for(const t of dayTasks(k)){
+    const tm = t.times[code]; if(!tm) continue;
+    const S = adj(toMin(tm)); rows.push({kind:'task', t, s:S, e:S + (t.duration || 0), st:tm});
+  }
+  if(bed){ const S = adj(toMin(bed)); rows.push({kind:'sleep', s:S, e:S}); }
+  const order = {wake:0, block:1, task:2, sleep:3};
+  rows.sort((a,b) => (a.kind === 'wake' ? -1 : b.kind === 'wake' ? 1 : a.kind === 'sleep' ? 1 : b.kind === 'sleep' ? -1 : 0) || a.s - b.s || order[a.kind] - order[b.kind]);
+  const out = []; let cur = null;
+  for(const r of rows){
+    if(cur != null && r.s - cur >= 15) out.push({kind:'gap', s:cur, e:r.s});
+    out.push(r); cur = cur == null ? r.e : Math.max(cur, r.e);
+  }
+  return out;
+}
+
+const whenCol = tm => { if(!tm) return `<div class="when"><b>Any</b><small>time</small></div>`; const [h,ap] = split12(tm); return `<div class="when"><b>${h}</b><small>${ap}</small></div>`; };
+
+function taskHTML(t, k, start, isToday, nowM){
+  const e = entry(k,t.id), v = e ? e.v : 0, sc = scoreOf(k,t), isFull = full(k,t);
+  const due = isToday && !isFull && start && toMin(start) <= nowM;
+  const st = taskStreak(t);
+  const chip = `<span class="chip ${st?'':'zero'}" aria-label="${st} day streak">${icon('flame')}${st}</span>`;
+  const range = start ? (t.duration ? fmtRange(start, fromMin(toMin(start) + t.duration)) : time12(start)) : (t.duration ? `About ${fmtDur(t.duration)}` : '');
+  if(t.kind === 'check'){
+    return `<article class="item check ${isFull?'full':''} ${due?'due':''}" data-id="${esc(t.id)}">
+      ${whenCol(start)}
+      <div class="node" style="--p:${sc/10}">${isFull ? icon('check') : ''}</div>
+      <div class="card"><div class="ck">
+        <span class="name">${esc(t.name)}${chip}</span>
+        ${range ? `<span class="range">${range}</span>` : ''}
+        <button class="tick ${isFull?'on':''}" data-act="tick" aria-pressed="${isFull}" aria-label="${esc(t.name)} done">${icon('check')}</button>
+      </div></div>
+    </article>`;
+  }
+  const collapsed = isCollapsed(k,t);
+  const segs = Array.from({length:10}, (_,i) => `<i><span style="width:${Math.max(0,Math.min(1,sc-i))*100}%"></span></i>`).join('');
+  return `<article class="item ${isFull?'full':''} ${due?'due':''} ${collapsed?'collapsed':''}" data-id="${esc(t.id)}">
+    ${whenCol(start)}
+    <div class="node" style="--p:${sc/10}">${isFull ? icon('check') : ''}</div>
+    <div class="card">
+      <button class="head" data-act="toggle" aria-expanded="${!collapsed}">
+        <span class="name">${esc(t.name)}${chip}</span>
+        ${range ? `<span class="range">${range}</span>` : ''}
+        <span class="meta">${fmt1(v)} of ${fmt1(t.target)} ${esc(t.unit)}</span>
+        <span class="sc"><b>${fmt1(sc)}</b><small>/10</small></span>
+      </button>
+      <div class="meter" role="img" aria-label="Score ${fmt1(sc)} out of 10">${segs}</div>
+      <div class="ctrl">
+        <button class="step" data-act="minus" aria-label="Less ${esc(t.name)}">−</button>
+        <input type="number" inputmode="decimal" min="0" step="any" value="${fmt1(v)}" data-act="set" aria-label="${esc(t.name)}, ${esc(t.unit)} done">
+        <button class="step" data-act="plus" aria-label="More ${esc(t.name)}">+</button>
+        <span class="sp"></span>
+        ${isFull ? '' : `<button class="done" data-act="full" aria-label="Mark ${esc(t.name)} fully done" title="Mark fully done">${icon('check')}</button>`}
+      </div>
+    </div>
+  </article>`;
+}
+
+function rtHTML(kind, k, isToday){
+  const tgt = rtTarget(kind,k), act = slog(k)[kind] || '', late = lateBy(kind,k), st = rtStreak(kind);
+  const label = kind === 'wake' ? 'Wake up' : 'Bedtime', verb = kind === 'wake' ? 'Woke at' : 'Slept at';
+  let status = 'Not logged', cls = '';
+  if(late != null){
+    if(late <= GRACE){ cls = 'ok'; status = late < -GRACE ? `${fmtDur(-late)} early` : 'On time'; }
+    else { cls = 'late'; status = `${fmtDur(late)} late`; }
+  }
+  const slept = kind === 'wake' ? sleptMins(k) : null;
+  return `<article class="item rt" data-rt="${kind}">
+    ${whenCol(tgt)}
+    <div class="node rtn">${icon(kind === 'wake' ? 'sun' : 'moon')}</div>
+    <div class="card rtcard">
+      <div class="rt-top"><span class="name">${label}<span class="chip ${st?'':'zero'}" aria-label="${st} day streak">${icon('flame')}${st}</span></span><span class="rt-status ${cls}">${status}</span></div>
+      <div class="rt-row"><label>${verb}<input type="time" value="${act}" data-rt-in="${kind}" aria-label="${label}, actual time"></label>
+        ${isToday ? `<button class="btn ghost sm" data-rt-now="${kind}">Now</button>` : ''}</div>
+      ${slept != null ? `<div class="rt-sub">Slept ${fmtDur(slept)} last night</div>` : ''}
+    </div>
+  </article>`;
+}
+
 function renderToday(){
   const k = viewDate, today = todayKey(), isToday = k === today, d = fromKey(k);
   $('dayTitle').innerHTML = isToday
@@ -508,48 +753,30 @@ function renderToday(){
   $('nextDay').disabled = k >= today;
   $('backToday').hidden = isToday;
 
-  const list = $('taskList');
-  list.classList.add('bare');
-  if(!state.tasks.length){ list.innerHTML = `<p class="empty">No tasks yet. In the Settings tab, tap Import task list and pick your tasks.json, or add tasks one by one.</p>`; return; }
-  const code = dayCode(k);
-  const ts = dayTasks(k).sort((a,b) => a.times[code].localeCompare(b.times[code]));
-  if(!ts.length){ list.innerHTML = `<p class="empty">Nothing scheduled for this day. Streaks are safe.</p>`; return; }
-
-  const hm = nowHM(); let html = '', nowDone = !isToday;
-  const nowLine = () => `<div class="now" aria-label="Now, ${time12(hm)}"><span class="t">${split12(hm)[0]}</span><span class="dot"></span><span class="ln"></span></div>`;
-  for(const t of ts){
-    const time = t.times[code];
-    if(!nowDone && time > hm){ html += nowLine(); nowDone = true; }
-    const e = entry(k,t.id), v = e ? e.v : 0, sc = scoreOf(k,t), isFull = full(k,t);
-    const due = isToday && !isFull && time <= hm;
-    const collapsed = isCollapsed(k,t);
-    const st = taskStreak(t);
-    const [hhmm, ap] = split12(time);
-    const segs = Array.from({length:10}, (_,i) => `<i><span style="width:${Math.max(0,Math.min(1,sc-i))*100}%"></span></i>`).join('');
-    html += `<article class="item ${isFull?'full':''} ${due?'due':''} ${collapsed?'collapsed':''}" data-id="${esc(t.id)}">
-      <div class="when"><b>${hhmm}</b><small>${ap}</small></div>
-      <div class="node" style="--p:${sc/10}">${isFull ? icon('check') : ''}</div>
-      <div class="card">
-        <button class="head" data-act="toggle" aria-expanded="${!collapsed}">
-          <span class="name">${esc(t.name)}<span class="chip ${st?'':'zero'}" aria-label="${st} day streak">${icon('flame')}${st}</span></span>
-          <span class="meta">${fmt1(v)} of ${fmt1(t.target)} ${esc(t.unit)}</span>
-          <span class="sc"><b>${fmt1(sc)}</b><small>/10</small></span>
-        </button>
-        <div class="meter" role="img" aria-label="Score ${fmt1(sc)} out of 10">${segs}</div>
-        <div class="ctrl">
-          <button class="step" data-act="minus" aria-label="Less ${esc(t.name)}">−</button>
-          <input type="number" inputmode="decimal" min="0" step="any" value="${fmt1(v)}" data-act="set" aria-label="${esc(t.name)}, ${esc(t.unit)} done">
-          <button class="step" data-act="plus" aria-label="More ${esc(t.name)}">+</button>
-          <span class="sp"></span>
-          ${isFull ? '' : `<button class="done" data-act="full" aria-label="Mark ${esc(t.name)} fully done" title="Mark fully done">${icon('check')}</button>`}
-        </div>
-      </div>
-    </article>`;
+  const list = $('taskList'), anyEl = $('anyList'), code = dayCode(k);
+  const rows = dayRows(k), any = dayTasks(k).filter(t => !t.times[code]);
+  const nowM = toMin(nowHM());
+  if(!rows.length && !any.length){
+    list.classList.add('bare'); anyEl.innerHTML = '';
+    list.innerHTML = state.tasks.length ? `<p class="empty">Nothing scheduled for this day. Streaks are safe.</p>`
+      : `<p class="empty">No tasks yet. In the Settings tab, tap Import task list and pick your tasks.json, or add tasks one by one.</p>`;
+    return;
   }
-  if(!nowDone) html += nowLine();
-  if(ts.every(t => full(k,t))) html += `<p class="allclear">All ${ts.length} tasks done${isToday?' today':''}.</p>`;
+  const nowLine = () => `<div class="now" aria-label="Now, ${time12(nowHM())}"><span class="t">${split12(nowHM())[0]}</span><span class="dot"></span><span class="ln"></span></div>`;
+  let html = '', nowDone = !isToday;
+  for(const r of rows){
+    if(!nowDone && r.s > nowM){ html += nowLine(); nowDone = true; }
+    if(r.kind === 'task') html += taskHTML(r.t, k, r.st, isToday, nowM);
+    else if(r.kind === 'block') html += `<div class="blk">${whenCol(r.st)}<div class="node sq"></div><div class="blk-card"><b>${esc(r.b.name)}</b><span>${fmtRange(r.st, r.et)}</span></div></div>`;
+    else if(r.kind === 'gap') html += `<div class="gap"><button class="gap-btn" data-gap-s="${fromMin(r.s)}" data-gap-len="${r.e - r.s}"><span>Free ${fmtRange(fromMin(r.s), fromMin(r.e))}<small>${fmtDur(r.e - r.s)}</small></span><span>+ Add task</span></button></div>`;
+    else html += rtHTML(r.kind, k, isToday);
+  }
+  if(!nowDone && rows.length) html += nowLine();
   list.innerHTML = html;
-  list.classList.remove('bare');
+  list.classList.toggle('bare', !rows.length);
+  const ts = dayTasks(k);
+  anyEl.innerHTML = (any.length ? `<h3 class="subh">Any time ${isToday ? 'today' : 'this day'}</h3><div class="timeline">${any.map(t => taskHTML(t, k, '', isToday, nowM)).join('')}</div>` : '')
+    + (ts.length && ts.every(t => full(k,t)) ? `<p class="allclear">All ${ts.length} tasks done${isToday?' today':''}.</p>` : '');
 }
 
 function setValue(id, v){
@@ -615,15 +842,43 @@ function renderCalendar(){
     const now = taskStreak(t);
     return `<tr><td>${esc(t.name)}</td><td class="cur">${now}</td><td>${Math.max(taskBest(t), now)}</td><td>${avg}</td></tr>`;
   }).join('') || `<tr><td colspan="4" class="note">No tasks yet.</td></tr>`;
+
+  const avg = a => a.length ? a.reduce((x,y) => x + y, 0) / a.length : null;
+  const wakes = monthDays.map(k => slog(k).wake).filter(Boolean).map(toMin);
+  const beds = monthDays.map(k => slog(k).sleep).filter(Boolean).map(t => bedAdj(toMin(t)));
+  const durs = monthDays.map(sleptMins).filter(m => m != null);
+  const aw = avg(wakes), ab = avg(beds), ad = avg(durs);
+  $('slWake').textContent = aw == null ? '–' : time12(fromMin(aw));
+  $('slBed').textContent = ab == null ? '–' : time12(fromMin(ab));
+  $('slDur').textContent = ad == null ? '–' : fmtDur(Math.round(ad));
+  $('sleepStats').innerHTML = ['wake','sleep'].map(kind => {
+    const logged = monthDays.filter(k => rtTarget(kind,k) && slog(k)[kind]);
+    const onTime = logged.filter(k => rtOnTime(kind,k)).length, now = rtStreak(kind);
+    return `<tr><td>${kind === 'wake' ? 'Wake-up' : 'Bedtime'}</td><td class="cur">${now}</td><td>${Math.max(rtBest(kind), now)}</td><td>${onTime}/${logged.length}</td></tr>`;
+  }).join('');
 }
 
+function daysText(days){
+  const on = WEEK.filter(d => days[d]);
+  return on.length === 7 ? 'Every day' : on.length ? on.map(shortDay).join(', ') : 'No days set';
+}
+function summarize(map, fmt){
+  const groups = [];
+  WEEK.forEach(d => { const v = map[d] || '', g = groups[groups.length-1]; if(g && g.v === v) g.days.push(d); else groups.push({v, days:[d]}); });
+  const span = ds => ds.length === 7 ? 'every day' : ds.length === 1 ? shortDay(ds[0]) : `${shortDay(ds[0])}–${shortDay(ds[ds.length-1])}`;
+  return groups.filter(g => g.v).map(g => `${fmt(g.v)} ${span(g.days)}`).join(', ') || 'Off every day';
+}
 function renderTasks(){
   $('taskRows').innerHTML = state.tasks.length ? state.tasks.map(t => {
-    const on = WEEK.filter(d => t.times[d]);
-    const daysTxt = on.length === 7 ? 'Every day' : on.length ? on.map(d => DAY_NAMES[d].slice(0,3)).join(', ') : 'No days set';
-    return `<div class="row"><div class="grow"><b>${esc(t.name)}</b><div class="sub">${fmt1(t.target)} ${esc(t.unit)}. ${daysTxt}</div></div>
+    const what = t.kind === 'check' ? 'Done / not done' : `${fmt1(t.target)} ${esc(t.unit)}`;
+    const dur = t.duration ? `, ${fmtDur(t.duration)}` : '';
+    return `<div class="row"><div class="grow"><b>${esc(t.name)}</b><div class="sub">${what}${dur}. ${daysText(t.days)}</div></div>
       <button class="btn ghost" data-edit="${esc(t.id)}">Edit</button></div>`;
   }).join('') : `<p class="empty">No tasks yet.</p>`;
+  const r = state.routine;
+  const row = (key, name, sub) => `<div class="row"><div class="grow"><b>${esc(name)}</b><div class="sub">${sub}</div></div><button class="btn ghost" data-rt-edit="${esc(key)}">Edit</button></div>`;
+  $('routineRows').innerHTML = row('wake', 'Wake up', summarize(r.wake, time12)) + row('sleep', 'Bedtime', summarize(r.sleep, time12))
+    + r.blocks.map(b => row(b.id, b.name, summarize(b.times, v => fmtRange(...v.split('-'))))).join('');
   $('passMark').value = String(state.passMark);
   renderLook();
 }
@@ -651,7 +906,16 @@ $('prevMonth').onclick = () => { const [y,m] = calMonth.split('-').map(Number); 
 $('nextMonth').onclick = () => { const [y,m] = calMonth.split('-').map(Number); const d = new Date(y,m,1); calMonth = `${d.getFullYear()}-${pad(d.getMonth()+1)}`; render(); };
 $('cal').addEventListener('click', e => { const b = e.target.closest('button[data-day]'); if(!b || b.disabled) return; viewDate = b.dataset.day; show('today'); });
 
-$('taskList').addEventListener('click', e => {
+$('view-today').addEventListener('click', e => {
+  const gap = e.target.closest('[data-gap-s]');
+  if(gap){ openEditor(null, { day: dayCode(viewDate), start: gap.dataset.gapS, duration: Math.min(Number(gap.dataset.gapLen), 60) }); return; }
+  const nowBtn = e.target.closest('[data-rt-now]');
+  if(nowBtn){
+    const kind = nowBtn.dataset.rtNow; let k = viewDate; const hm = nowHM();
+    // Tapping bedtime after midnight logs it for the night before
+    if(kind === 'sleep' && toMin(hm) < Math.min(toMin(rtTarget('wake',k) || '06:00'), 600)) k = addDays(k,-1);
+    setRt(kind, k, hm); return;
+  }
   const b = e.target.closest('button[data-act]'); if(!b) return;
   const id = b.closest('.item').dataset.id; const t = state.tasks.find(x => x.id === id);
   if(b.dataset.act === 'toggle'){
@@ -659,11 +923,14 @@ $('taskList').addEventListener('click', e => {
     set.has(id) ? set.delete(id) : set.add(id); renderToday(); return;
   }
   const cur = (entry(viewDate,id)||{v:0}).v;
+  if(b.dataset.act === 'tick') setValue(id, cur >= t.target ? 0 : t.target);
   if(b.dataset.act === 'plus') setValue(id, cur + (t.step||1));
   if(b.dataset.act === 'minus') setValue(id, cur - (t.step||1));
   if(b.dataset.act === 'full') setValue(id, t.target);
 });
-$('taskList').addEventListener('change', e => {
+$('view-today').addEventListener('change', e => {
+  const rt = e.target.closest('input[data-rt-in]');
+  if(rt){ setRt(rt.dataset.rtIn, viewDate, rt.value); return; }
   const i = e.target.closest('input[data-act="set"]'); if(!i) return;
   const v = parseFloat(i.value); setValue(i.closest('.item').dataset.id, isNaN(v) ? 0 : v);
 });
@@ -678,21 +945,37 @@ $('swatches').addEventListener('click', e => { const b = e.target.closest('butto
 $('passMark').onchange = e => { state.passMark = Number(e.target.value); save(); render(); toast(`Streak rule set to ${state.passMark}/10`); };
 
 // Task editor
-let editingId = null;
-$('dayInputs').innerHTML = WEEK.map(d => `<label for="time-${d}">${DAY_NAMES[d]}</label><input type="time" id="time-${d}" name="time-${d}">`).join('');
-function openEditor(id){
+let editingId = null, editKind = 'amount';
+$('dayInputs').innerHTML = WEEK.map(d => `<label class="dchk"><input type="checkbox" name="on-${d}">${DAY_NAMES[d]}</label><input type="time" name="time-${d}" aria-label="${DAY_NAMES[d]} start time">`).join('');
+function setKind(kind){
+  editKind = kind;
+  document.querySelectorAll('#kindSeg button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.kind === kind)));
+  $('amountFields').hidden = kind === 'check';
+  ['target','unit','step'].forEach(n => $('editForm')[n].required = kind !== 'check');
+}
+function syncDayInputs(){ const f = $('editForm'); WEEK.forEach(d => f['time-'+d].disabled = !f['on-'+d].checked); }
+function openEditor(id, pre){
   editingId = id; const f = $('editForm');
-  const t = id ? state.tasks.find(x => x.id === id) : {name:'',target:'',unit:'minutes',step:1,times:{}};
+  const t = id ? state.tasks.find(x => x.id === id)
+    : normTask({ id:'_new', name:'', kind:'amount', target:'', unit:'minutes', step:1, duration: pre ? pre.duration : '', times:{}, days:{} });
   $('editTitle').textContent = id ? 'Edit task' : 'New task';
-  f.name.value = t.name; f.target.value = t.target; f.unit.value = t.unit; f.step.value = t.step;
-  WEEK.forEach(d => f['time-'+d].value = (t.times||{})[d] || '');
+  f.name.value = t.name;
+  f.target.value = t.kind === 'check' || !t.target ? '' : t.target;
+  f.unit.value = t.kind === 'check' ? 'minutes' : t.unit;
+  f.step.value = t.step;
+  f.duration.value = id ? (t.duration || '') : (pre ? pre.duration : '');
+  WEEK.forEach(d => { f['on-'+d].checked = !!t.days[d]; f['time-'+d].value = t.times[d] || ''; });
+  if(pre){ f['on-'+pre.day].checked = true; f['time-'+pre.day].value = pre.start; }
+  setKind(t.kind); syncDayInputs();
   $('deleteTask').hidden = !id;
   $('editDlg').showModal();
 }
+$('kindSeg').addEventListener('click', e => { const b = e.target.closest('button[data-kind]'); if(b) setKind(b.dataset.kind); });
+$('dayInputs').addEventListener('change', e => { if(e.target.type === 'checkbox') syncDayInputs(); });
 $('taskRows').addEventListener('click', e => { const b = e.target.closest('[data-edit]'); if(b) openEditor(b.dataset.edit); });
 $('addTask').onclick = () => openEditor(null);
 $('cancelEdit').onclick = () => $('editDlg').close();
-$('copyMon').onclick = () => { const f = $('editForm'); ['tue','wed','thu','fri'].forEach(d => f['time-'+d].value = f['time-mon'].value); };
+$('copyMon').onclick = () => { const f = $('editForm'); ['tue','wed','thu','fri'].forEach(d => { f['on-'+d].checked = f['on-mon'].checked; f['time-'+d].value = f['time-mon'].value; }); syncDayInputs(); };
 $('deleteTask').onclick = () => {
   if(!editingId) return;
   const t = state.tasks.find(x => x.id === editingId);
@@ -702,10 +985,16 @@ $('deleteTask').onclick = () => {
 };
 $('editForm').addEventListener('submit', e => {
   e.preventDefault(); const f = e.target;
-  const target = parseFloat(f.target.value), step = parseFloat(f.step.value);
-  if(!(target > 0) || !(step > 0)){ toast('Target and button step must be above 0'); return; }
-  const times = {}; WEEK.forEach(d => times[d] = f['time-'+d].value || '');
-  const data = { name: f.name.value.trim(), target, unit: f.unit.value.trim(), step, times };
+  let target = 1, unit = 'done', step = 1;
+  if(editKind === 'amount'){
+    target = parseFloat(f.target.value); step = parseFloat(f.step.value); unit = f.unit.value.trim();
+    if(!(target > 0) || !(step > 0)){ toast('Target and button step must be above 0'); return; }
+  }
+  const duration = Math.max(0, parseInt(f.duration.value, 10) || 0);
+  const days = {}, times = {};
+  WEEK.forEach(d => { days[d] = f['on-'+d].checked; times[d] = days[d] ? (f['time-'+d].value || '') : ''; });
+  if(!WEEK.some(d => days[d])){ toast('Tick at least one day'); return; }
+  const data = { name: f.name.value.trim(), kind: editKind, target, unit, step, duration, days, times };
   if(editingId){ Object.assign(state.tasks.find(x => x.id === editingId), data); }
   else {
     let base = data.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'task', id = base, n = 2;
@@ -713,12 +1002,59 @@ $('editForm').addEventListener('submit', e => {
     state.tasks.push({ id, ...data });
   }
   save(); $('editDlg').close(); render();
-  toast('Saved. Copy the reminder file to update reminders.');
+  toast(WEEK.some(d => times[d]) ? 'Saved. Copy the reminder file to update reminders.' : 'Saved');
+});
+
+// Routine editor (wake-up, bedtime, fixed blocks)
+let rtEditing = null;
+function openRt(key){
+  rtEditing = key; const f = $('rtForm'), point = key === 'wake' || key === 'sleep';
+  const b = point ? null : key === '_new' ? { name:'', times:{} } : state.routine.blocks.find(x => x.id === key);
+  $('rtTitle').textContent = key === 'wake' ? 'Wake-up time' : key === 'sleep' ? 'Bedtime' : key === '_new' ? 'New fixed time' : 'Edit fixed time';
+  $('rtNameWrap').hidden = point; f.name.required = !point; f.name.value = b ? b.name : '';
+  $('rtHint').textContent = point ? 'Leave a day blank to skip it.' : 'Set a start and end for each day. Leave both blank on days it doesn’t happen.';
+  $('rtDays').innerHTML = WEEK.map(d => {
+    const v = point ? (state.routine[key][d] || '') : (b.times[d] || '');
+    const [st,et] = point ? [v,''] : (v ? v.split('-') : ['','']);
+    return `<span>${shortDay(d)}</span><input type="time" name="s-${d}" value="${st}" aria-label="${DAY_NAMES[d]} ${point ? 'time' : 'start'}">`
+      + (point ? '<span></span>' : `<input type="time" name="e-${d}" value="${et}" aria-label="${DAY_NAMES[d]} end">`);
+  }).join('');
+  $('rtDelete').hidden = point || key === '_new';
+  $('rtDlg').showModal();
+}
+$('routineRows').addEventListener('click', e => { const b = e.target.closest('[data-rt-edit]'); if(b) openRt(b.dataset.rtEdit); });
+$('addBlock').onclick = () => openRt('_new');
+$('rtCancel').onclick = () => $('rtDlg').close();
+$('rtCopyMon').onclick = () => { const f = $('rtForm'); ['tue','wed','thu','fri'].forEach(d => { f['s-'+d].value = f['s-mon'].value; if(f['e-'+d]) f['e-'+d].value = f['e-mon'].value; }); };
+$('rtDelete').onclick = () => {
+  const b = state.routine.blocks.find(x => x.id === rtEditing); if(!b) return;
+  if(!confirm(`Remove "${b.name}" from your routine?`)) return;
+  state.routine.blocks = state.routine.blocks.filter(x => x.id !== rtEditing); save(); $('rtDlg').close(); render();
+};
+$('rtForm').addEventListener('submit', e => {
+  e.preventDefault(); const f = e.target, point = rtEditing === 'wake' || rtEditing === 'sleep';
+  if(point){ WEEK.forEach(d => state.routine[rtEditing][d] = f['s-'+d].value || ''); }
+  else {
+    const times = {};
+    for(const d of WEEK){
+      const st = f['s-'+d].value, et = f['e-'+d].value;
+      if(st && et) times[d] = `${st}-${et}`;
+      else if(st || et){ toast(`Add both start and end for ${DAY_NAMES[d]}`); return; }
+      else times[d] = '';
+    }
+    const name = f.name.value.trim(); if(!name){ toast('Give it a name'); return; }
+    if(rtEditing === '_new'){
+      let base = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'block', id = base, n = 2;
+      while(state.routine.blocks.some(x => x.id === id)) id = `${base}-${n++}`;
+      state.routine.blocks.push({ id, name, times });
+    } else Object.assign(state.routine.blocks.find(x => x.id === rtEditing), { name, times });
+  }
+  save(); $('rtDlg').close(); render(); toast('Routine saved');
 });
 
 // Reminder file
 function reminderJSON(){
-  return JSON.stringify({ utc_offset: state.utc_offset || '+05:30', tasks: state.tasks.map(t => ({ id:t.id, name:t.name, target:t.target, unit:t.unit, step:t.step, times:t.times })) }, null, 2) + '\n';
+  return JSON.stringify({ utc_offset: state.utc_offset || '+05:30', tasks: state.tasks.map(t => ({ id:t.id, name:t.name, kind:t.kind, target:t.target, unit:t.unit, step:t.step, duration:t.duration, days:t.days, times:t.times })) }, null, 2) + '\n';
 }
 function download(name, text){
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text],{type:'application/json'})); a.download = name;
@@ -736,10 +1072,10 @@ $('importTasksFile').onchange = async e => {
   const file = e.target.files[0]; if(!file) return;
   try {
     const data = JSON.parse(await file.text());
-    const ok = Array.isArray(data.tasks) && data.tasks.every(t => t && t.id && t.name && t.target > 0 && t.times);
+    const ok = Array.isArray(data.tasks) && data.tasks.every(t => t && t.id && t.name && (t.kind === 'check' || t.target > 0) && (t.times || t.days));
     if(!ok) throw new Error('bad');
     if(state.tasks.length && !confirm(`Replace your ${state.tasks.length} tasks with the ${data.tasks.length} in this file? Scores and streaks stay.`)) return;
-    state.tasks = data.tasks.map(t => ({ id:String(t.id), name:String(t.name), target:Number(t.target), unit:String(t.unit||''), step:Number(t.step)||1, times:t.times }));
+    state.tasks = data.tasks.map(normTask);
     if(data.utc_offset) state.utc_offset = data.utc_offset;
     save(); render(); toast(`Loaded ${state.tasks.length} tasks`);
   } catch(err) { toast('That file is not a tasks.json task list'); }
@@ -755,7 +1091,7 @@ $('importFile').onchange = async e => {
     const data = JSON.parse(await file.text());
     if(!Array.isArray(data.tasks) || typeof data.logs !== 'object') throw new Error('bad');
     if(!confirm('Replace everything on this phone with this backup?')) return;
-    state = data; save(); viewDate = todayKey(); render(); toast('Backup restored');
+    state = data; migrate(); save(); viewDate = todayKey(); render(); toast('Backup restored');
   } catch(err) { toast('That file is not an Abhyas backup'); }
   e.target.value = '';
 };
@@ -770,7 +1106,7 @@ function toast(msg){ const t = $('toast'); t.textContent = msg; t.classList.add(
 
 // Refresh when the app comes back to the foreground (day or time may have changed)
 document.addEventListener('visibilitychange', () => { if(!document.hidden){ const t = todayKey(); if(viewDate > t) viewDate = t; render(); } });
-setInterval(() => { if(!document.hidden && view === 'today' && viewDate === todayKey()) renderToday(); }, 60000);
+setInterval(() => { const a = document.activeElement; if(!document.hidden && view === 'today' && viewDate === todayKey() && !(a && a.tagName === 'INPUT') && !document.querySelector('dialog[open]')) renderToday(); }, 60000);
 
 if('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 init();
